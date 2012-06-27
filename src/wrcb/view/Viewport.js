@@ -3,7 +3,7 @@ mamd.define("wrcb.view.Viewport",
         "wrcb.utils"
     ],
     function (utils) {
-    var Viewport = function (params) {
+    return function (params) {
         var width = params.width || 320,
             height = params.height || 240,
             doubleBuffering = "doubleBuffering" in params
@@ -99,6 +99,4 @@ mamd.define("wrcb.view.Viewport",
             return scenes[sceneId] || scenes[currentScene];
         };
     }
-
-    return Viewport;
 });
