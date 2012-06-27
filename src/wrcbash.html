@@ -2,6 +2,20 @@
 <html lang="pl">
     <head>
         <title>WRC BASH!</title>
+        <script type="text/javascript" src="assets/js/mamd.js"></script>
+        <script type="text/javascript">
+            (function (window, document) {
+                mamd.require(["wrcb.dom.Ready"], function (ready) {
+                    console.log("checking if dom is ready");
+                    ready(function () {
+                        console.log("dom is ready, loading main game file");
+                        mamd.require(["wrcb.Game"], function (game) {
+                                game.init();
+                            });
+                        });
+                });
+            })(window, document);
+        </script>
     </head>
     <body>
     </body>
