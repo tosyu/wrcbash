@@ -63,12 +63,12 @@ mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
             //@TODO COLLISIONS
         };
 
-        this.getActorsByLayer = function (revesed) {
-            return actors.sort(function (actor1, actor2) { //REVERSED!
+        this.getActorsByLayer = function (reversed) {
+            return actors.sort(function (actor1, actor2) {
                 if (actor1._sceneLayer < actor2._sceneLayer) {
-                    return revesed ? 1 : -1;
+                    return reversed ? 1 : -1;
                 } else if (actor1._sceneLayer > actor2._sceneLayer) {
-                    return revesed ? -1 : 1;
+                    return reversed ? -1 : 1;
                 }
                 return 0;
             });
