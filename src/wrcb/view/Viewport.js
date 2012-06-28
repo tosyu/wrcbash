@@ -32,9 +32,9 @@ mamd.define("wrcb.view.Viewport",
 
         canvas.setAttribute("width", width);
         canvas.setAttribute("height", height);
-        canvas.setAttribute("style", "width:100%;height:100%;position:absolute;top:0;left:0;background:#000000;");
+        canvas.setAttribute("style", "width:100%;height:100%;min-height:100%;position:absolute;top:0;left:0;background:#000000;");
 
-        document.body.setAttribute("style", "width:100%;height:640px"); //@FIXME
+        document.body.setAttribute("style", "width:100%;height:100%px;min-height:100%;overflow:hidden;"); //@FIXME
         document.body.appendChild(canvas);
 
 
@@ -46,16 +46,14 @@ mamd.define("wrcb.view.Viewport",
         }
 
         this.draw = function () {
-            /*if (typeof this.currentScene === "undefined") {
-                throw new Error("No scene selected!");
-            }*/
+            if (typeof this.currentScene === "undefined") {
+                throw  Error("No scene selected!");
+            }
             // clear the back buffer
             clear();
+
             // draw
-            //var ctx = this.getContext();
-            //this.scenes[this.currentScene]._draw(ctx);
-            getContext().fillStyle = utils.getColor(100, 100, 100); //@TODO remove
-            getContext().fillRect (10, 10, 55 + Math.round(Math.random(100)), 50); //@TODO remove
+            this.scenes[this.currentScene].draw(getContext());
 
             // flip buffers
             swapBuffers();
@@ -65,7 +63,7 @@ mamd.define("wrcb.view.Viewport",
             console.log("Viewport scene registration", sceneId);
 
             if (!sceneId || !scene) {
-                throw new "Scene not defined";
+                throw "Scene not defined";
             }
 
             scenes[sceneId] = scene;
@@ -79,7 +77,7 @@ mamd.define("wrcb.view.Viewport",
             console.log('Viewport scene unregistration', sceneId);
 
             if (!sceneId) {
-                throw new 'Scene not defined';
+                throw  'Scene not defined';
             }
 
             delete scenes[sceneId];
@@ -89,7 +87,7 @@ mamd.define("wrcb.view.Viewport",
             console.log('Select scene', sceneId);
 
             if (!scenes[sceneId]) {
-                throw new 'Scene does not exist!';
+                throw  'Scene does not exist!';
             }
 
             currentScene = sceneId;

@@ -26,19 +26,22 @@ mamd.define("wrcb.Game", function () {
                 window.clearTimeout(timeoutId);
             }
         };
-
     return {
         "init": function () {
             console.log("game initialized, loading files");
             mamd.require([
                 "wrcb.loader.Assets",
-                "wrcb.view.Viewport"
+                "wrcb.view.Viewport",
+                "wrcb.scenes.Demo"
                 ], function (
                     assets,
-                    Viewport) {
+                    Viewport,
+                    Demo) {
 
                 viewport = new Viewport({});
-                start();
+                var demo = new Demo();
+                viewport.addScene("demoscene", demo);
+                //start();
 
                 /*assets.load(function () {
                     console.log("loaded all asssets");
