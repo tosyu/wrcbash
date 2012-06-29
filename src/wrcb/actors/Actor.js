@@ -37,7 +37,9 @@ mamd.define("wrcb.actors.Actor", ["wrcb.utils"], function (utils) {
         this._tick = function (timestamp) {
             var force = forces.length;
             while (--force >= 0) {
-                !!forces[force].tick && forces[force].tick();
+                !!forces[force].tick
+                    && window.setTimeout(utils.bind(forces[force].tick, forces[force], timestamp), 15);
+
             }
             !!this.tick && window.setTimeout(utils.bind(this.tick, this, timestamp), 15);
         };
