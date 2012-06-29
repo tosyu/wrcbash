@@ -6,6 +6,9 @@ mamd.define("wrcb.view.Viewport",
     return function (params) {
         var width = params.width || 320,
             height = params.height || 240,
+            gameAspectRatio = width / height,
+            screenAspectRatio = 0,
+            canvasWidthStretch = 100,
             doubleBuffering = "doubleBuffering" in params
                 ? params.doubleBuffering
                 : true,
@@ -30,13 +33,15 @@ mamd.define("wrcb.view.Viewport",
                 ctx.restore();
             };
 
+        screenAspectRatio = screen.availWidth / screen.availHeight;
+        canvasWidthStretch -= canvasWidthStretch * ((screen.availWidth - (screen.availHeight * gameAspectRatio)) / screen.availWidth)
+
         canvas.setAttribute("width", width);
         canvas.setAttribute("height", height);
-        canvas.setAttribute("style", "width:100%;height:100%;min-height:100%;position:absolute;top:0;left:0;background:#000000;");
+        canvas.setAttribute("style", ["width:", Math.round(canvasWidthStretch), "%;height:100%;min-height:100%;background:#000000;margin:0px auto;"].join(''));
 
-        document.body.setAttribute("style", "width:100%;height:100%px;min-height:100%;overflow:hidden;"); //@FIXME
+        document.body.setAttribute("style", "width:100%;height:100%;min-height:100%;overflow:hidden;padding:0px;margin:0px;"); //@FIXME
         document.body.appendChild(canvas);
-
 
         if (doubleBuffering) {
             canvas = document.createElement("canvas");
@@ -46,14 +51,11 @@ mamd.define("wrcb.view.Viewport",
         }
 
         this.draw = function () {
-            if (typeof this.currentScene === "undefined") {
-                throw  Error("No scene selected!");
-            }
             // clear the back buffer
             clear();
 
             // draw
-            this.scenes[this.currentScene].draw(getContext());
+            !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(getContext())
 
             // flip buffers
             swapBuffers();

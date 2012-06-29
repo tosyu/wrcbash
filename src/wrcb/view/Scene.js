@@ -1,16 +1,8 @@
 mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
-    return function () {
+    var Scene = function () {
         var layers = [0,1,2,3,4],
             actorLayers = {},
             actors = [];
-
-        this.consts = {
-            "LAYER_BACKGROUND_FAR": 0,
-            "LAYER_BACKGROUND": 1,
-            "LAYER_MIDGROUND": 2,
-            "LAYER_FOREGROUND": 3,
-            "LAYER_FOREGROUND_CLOSE": 4
-        };
 
         this.registerActor = function (layer, id, actor) {
 
@@ -34,6 +26,9 @@ mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
 
             actors._sceneLayer = layer;
             actors.push(actor);
+            if (!actorLayers[layer]) {
+                actorLayers[layer] = {};
+            }
             actorLayers[layer][id] = utils.indexOf(actors, actor);
 
             //@TODO COLLISIONS
@@ -102,9 +97,19 @@ mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
                 actor = _actors.length;
             while (--actor >= 0) {
                 context.save();
-                actors[actor].draw(context);
+                actors[actor]._draw(context);
                 context.restore();
             }
         };
     };
+
+    Scene.consts = {
+        "LAYER_BACKGROUND_FAR": 0,
+        "LAYER_BACKGROUND": 1,
+        "LAYER_MIDGROUND": 2,
+        "LAYER_FOREGROUND": 3,
+        "LAYER_FOREGROUND_CLOSE": 4
+    };
+
+    return Scene;
 });

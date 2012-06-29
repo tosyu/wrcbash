@@ -1,5 +1,6 @@
-mamd.define("wrcb.loader.Assets", ["wrcb.loader.Request"], function (request) {
+mamd.define("wrcb.loader.Assets", ["wrcb.utils", "wrcb.loader.Request"], function (utils, request) {
     var assets = [],
+        loadedAssets = {}
         loaded = 0,
         failed = 0,
         onLoad = false,
@@ -18,7 +19,9 @@ mamd.define("wrcb.loader.Assets", ["wrcb.loader.Request"], function (request) {
                 !!onFailed && onFailed();
             }
         },
-        handleAssetLoad = function (evt) {
+        handleAssetLoad = function (url, evt) {
+            console.log(arguments);
+            loadedAssets[url] = evt.currentTarget;
             loaded++;
             checkState();
             !!evt.currentTarget && !!evt.currentTarget.parentNode
@@ -33,24 +36,22 @@ mamd.define("wrcb.loader.Assets", ["wrcb.loader.Request"], function (request) {
         loadData = function () {
             var i = assets.length,
                 img,
-                aud;
+                aud,
+                url;
             while (--i >= 0) {
                 console.log("loading", assets[i].url);
+                url = assets[i].url;
                 switch (assets[i].type) {
                 case "image":
                     img = new Image();
-                    !!img.addEventListener && img.addEventListener("load", handleAssetLoad);
-                    !!img.addEventListener && img.addEventListener("error", handleAssetError);
-                    !!img.attachEvent && img.attachEvent("load", handleAssetLoad);
-                    !!img.attachEvent && img.attachEvent("error", handleAssetError);
+                    utils.bindEvent(img, "load", utils.bind(handleAssetLoad, handleAssetLoad, url));
+                    utils.bindEvent(img, "error", handleAssetError);
                     img.src = assets[i].url;
                     break;
                 case "audio":
                     aud = document.createElement("audio");
-                    !!aud.addEventListener && aud.addEventListener("loadeddata", handleAssetLoad);
-                    !!aud.addEventListener && aud.addEventListener("loadeddata", handleAssetError);
-                    !!aud.attachEvent && aud.attachEvent("load", handleAssetLoad);
-                    !!aud.attachEvent && aud.attachEvent("error", handleAssetError);
+                    utils.bindEvent(aud, "loadeddata", utils.bind(handleAssetLoad, handleAssetLoad, url));
+                    utils.bindEvent(aud, "error", handleAssetError);
                     aud.src = assets[i].url;
                     document.body.appendChild(aud);
                     break;
@@ -61,6 +62,21 @@ mamd.define("wrcb.loader.Assets", ["wrcb.loader.Request"], function (request) {
     return {
         "load": function (callback) {
             onLoad = callback || false;
+            mamd.require(["assets.assets"], function (data) {
+                console.log("loaded descriptor", data);
+                var i = data.images && data.images.length || 0;
+                while (--i >= 0) {
+                    add(data.images[i], "image");
+                }
+                var i = data.audio && data.audio.length || 0;
+                while (--i >= 0) {
+                    add(data.audio[i], "audio");
+                }
+                loadData();
+            });
+            // BROWSERS DONT ALLOW AJAX LOCAL
+            // @FIXME
+            /*onLoad = callback || false;
             var rs = request.create({
                 "url": "assets/assets.json"
             });
@@ -79,7 +95,11 @@ mamd.define("wrcb.loader.Assets", ["wrcb.loader.Request"], function (request) {
             }).on("error", function () {
                 console.error("could not load assets data")
             });
-            rs.send();
+            rs.send();*/
+        },
+
+        "get": function (path) {
+            return !!loadedAssets[path] && loadedAssets[path];
         }
     }
 });

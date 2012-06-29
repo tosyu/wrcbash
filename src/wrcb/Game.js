@@ -37,17 +37,21 @@ mamd.define("wrcb.Game", function () {
                     assets,
                     Viewport,
                     Demo) {
+                viewport = new Viewport({
+                    "width": 640,
+                    "height": 480
+                });
+                start();
 
-                viewport = new Viewport({});
-                var demo = new Demo();
-                viewport.addScene("demoscene", demo);
-                //start();
-
-                /*assets.load(function () {
+                assets.load(function () {
                     console.log("loaded all asssets");
+
+                    var demo = new Demo();
+                    viewport.addScene("demoscene", demo);
+
                 }, function () {
                     console.log("failed to load assets");
-                });*/
+                });
             })
         }
     };
