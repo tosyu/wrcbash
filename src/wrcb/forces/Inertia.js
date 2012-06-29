@@ -1,16 +1,16 @@
 mamd.define(
     "wrcb.forces.Inertia",
     [
+        "wrcb.forces.Force",
         "wrcb.utils"
     ],
-    function (utils) {
-        var affectedActor = false,
-            isApplying = false,
-            verticalMove = function (negative) {
-                var p = affectedActor.getPosition(),
-                    r = affectedActor.getRotation(),
+    function (Force, utils) {
+        Inertia = function () {
+            var move = function (actor, negative) {
+                var p = actor.getPosition(),
+                    r = actor.getRotation(),
                     radians = r * Math.PI / 180,
-                    v = affectedActor.getVelocity(),
+                    v = actor.getVelocity(),
                     m = [
                         Math.cos(radians) * v,
                         Math.sin(radians) * v
@@ -20,35 +20,27 @@ mamd.define(
                     if (v > -0.1) {
                         v = 0;
                     }
-                    affectedActor.setVelocity(v);
+                    actor.setVelocity(v);
                 } else {
                     v -= 0.1;
                     if (v < 0.1) {
                         v = 0;
                     }
-                    affectedActor.setVelocity(v);
+                    actor.setVelocity(v);
                 }
-                affectedActor.setPosition(p[0] + m[0], p[1] + m[1]);
+                actor.setPosition(p[0] + m[0], p[1] + m[1]);
             };
 
-        return {
-            "affects": function (actor) {
-                affectedActor = actor;
-            },
+            this.tick = function () {
+                var actors = this.getBound(),
+                    actor = 0;
 
-            "isApplying": function () {
-                return isApplying;
-            },
-
-            "tick": function () {
-                var forces = affectedActor.getForcesApplying(),
-                    v = affectedActor.getVelocity();
-                if (v !== 0) {
-                    isApplying = true;
-                    verticalMove(v < 0);
-                } else {
-                    isApplying = false;
+                while (--actor >= 0) {
+                    move(actor[i], actor[i].getVelocity() < 0);
                 }
-            }
+            };
         };
+
+        Inertia.prototype = new Force();
+        return Inertia;
 });

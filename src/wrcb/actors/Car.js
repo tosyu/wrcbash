@@ -7,13 +7,13 @@ mamd.define(
         "wrcb.forces.UserInput",
         "wrcb.forces.Inertia"
     ],
-    function (utils, assets, Actor, userInput, inertia) {
+    function (utils, assets, Actor, UserInput, Inertia) {
 
     var Car = function () {
         var carSprite = assets.get("assets/images/car_white_red_stripes.png");
 
-        this.addForce(userInput);
-        this.addForce(inertia);
+        this.addForce(new UserInput);
+        this.addForce(new Inertia);
 
         this.draw = function (context) {
             var p = this.getPosition(),

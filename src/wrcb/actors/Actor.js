@@ -116,7 +116,7 @@ mamd.define("wrcb.actors.Actor", ["wrcb.utils"], function (utils) {
 
         this.addForce = function (force) {
             if (utils.indexOf(forces, force) === -1) {
-                force.affects(this);
+                force.bind(this);
                 forces.push(force);
             }
         };
@@ -124,6 +124,7 @@ mamd.define("wrcb.actors.Actor", ["wrcb.utils"], function (utils) {
         this.removeForce = function (force) {
             var index;
             if ((index = utils.indexOf(forces, force)) !== -1) {
+                forces[index].unbind(this);
                 forces.splice(index, 1);
             }
         };
