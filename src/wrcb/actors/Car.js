@@ -13,7 +13,7 @@ mamd.define(
         var carSprite = assets.get("assets/images/car_white_red_stripes.png");
 
         this.addForce(new UserInput);
-        //this.addForce(new Inertia);
+        this.addForce(new Inertia);
 
         this.draw = function (context) {
             var p = this.getPosition(),

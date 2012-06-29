@@ -22,7 +22,7 @@ mamd.define(
                             v = 0;
                         }
                         if (v >= -2) {
-                            v -= 0.3;
+                            v -= 0.2;
                         }
                         actor.setVelocity(v);
                     } else {
@@ -38,9 +38,9 @@ mamd.define(
                         v = actor.getVelocity();
                     if (Math.abs(v) > 0) {
                         if (negative) {
-                            actor.setRotation(r-1);
+                            actor.setRotation(r-1.7);
                         } else {
-                            actor.setRotation(r+1);
+                            actor.setRotation(r+1.7);
                         }
                     }
                 };

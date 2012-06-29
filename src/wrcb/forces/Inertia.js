@@ -7,6 +7,7 @@ mamd.define(
     function (Force, utils) {
         Inertia = function () {
             var move = function (actor, negative) {
+
                 var p = actor.getPosition(),
                     r = actor.getRotation(),
                     radians = r * Math.PI / 180,
@@ -16,13 +17,13 @@ mamd.define(
                         Math.sin(radians) * v
                     ];
                 if (negative) {
-                    v += 0.1;
+                    v += 0.08;
                     if (v > -0.1) {
                         v = 0;
                     }
                     actor.setVelocity(v);
                 } else {
-                    v -= 0.1;
+                    v -= 0.06;
                     if (v < 0.1) {
                         v = 0;
                     }
@@ -33,10 +34,10 @@ mamd.define(
 
             this.tick = function () {
                 var actors = this.getBound(),
-                    actor = 0;
+                    actor = actors.length;
 
                 while (--actor >= 0) {
-                    move(actor[i], actor[i].getVelocity() < 0);
+                    move(actors[actor], actors[actor].getVelocity() < 0);
                 }
             };
         };
