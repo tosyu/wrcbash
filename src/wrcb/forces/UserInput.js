@@ -1,8 +1,8 @@
 mamd.define(
     "wrcb.forces.UserInput",
     [
-        "wrcb.forces.Force",
-        "wrcb.utils"
+        "wrcb.core.Force",
+        "wrcb.core.utils"
     ],
     function (Force, utils) {
 
@@ -44,6 +44,8 @@ mamd.define(
                         }
                     }
                 };
+
+            this.setType("UserInput");
 
             utils.bindEvent(document, "keyup", function (evt) {
                 var key = event.keyCode || event.which,

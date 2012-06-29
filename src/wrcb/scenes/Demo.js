@@ -1,6 +1,6 @@
 mamd.define("wrcb.scenes.Demo",
     [
-        "wrcb.view.Scene",
+        "wrcb.core.Scene",
         "wrcb.actors.Car"
     ],
     function (Scene, Car) {

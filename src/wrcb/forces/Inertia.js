@@ -1,8 +1,8 @@
 mamd.define(
     "wrcb.forces.Inertia",
     [
-        "wrcb.forces.Force",
-        "wrcb.utils"
+        "wrcb.core.Force",
+        "wrcb.core.utils"
     ],
     function (Force, utils) {
         Inertia = function () {
@@ -23,7 +23,7 @@ mamd.define(
                     }
                     actor.setVelocity(v);
                 } else {
-                    v -= 0.06;
+                    v -= 0.025;
                     if (v < 0.1) {
                         v = 0;
                     }
@@ -31,6 +31,8 @@ mamd.define(
                 }
                 actor.setPosition(p[0] + m[0], p[1] + m[1]);
             };
+
+            this.setType("Inertia");
 
             this.tick = function () {
                 var actors = this.getBound(),

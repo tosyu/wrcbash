@@ -1,4 +1,4 @@
-mamd.define("wrcb.loader.Request", function () {
+mamd.define("wrcb.core.Request", function () {
 
     var Request = function (params) {
         if (!params || typeof params !== "object") {

@@ -1,9 +1,9 @@
 mamd.define(
     "wrcb.actors.Car",
     [
-        "wrcb.utils",
+        "wrcb.core.utils",
         "wrcb.loader.Assets",
-        "wrcb.actors.Actor",
+        "wrcb.core.Actor",
         "wrcb.forces.UserInput",
         "wrcb.forces.Inertia"
     ],
@@ -35,7 +35,10 @@ mamd.define(
         "y": 10,
         "width": 64,
         "height": 64,
-        "drawable": true
+        "drawable": true,
+        "collidable": true,
+        "collider": true,
+        "id": "playerCar"
     });
 
     return Car;

@@ -1,10 +1,15 @@
-mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
+mamd.define("wrcb.core.Scene",
+    [
+        "wrcb.core.utils",
+        "wrcb.core.CollisionSystem"
+    ], function (utils, CollisionSystem) {
     var Scene = function () {
         var layers = [0,1,2,3,4],
             actorLayers = {},
-            actors = [];
+            actors = [],
+            cs = new CollisionSystem();
 
-        this.registerActor = function (layer, id, actor) {
+        this.registerActor = function (layer, id, actor, CollisionSystem) {
 
             switch (true) {
             case !layer:
@@ -30,8 +35,9 @@ mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
                 actorLayers[layer] = {};
             }
             actorLayers[layer][id] = utils.indexOf(actors, actor);
-
-            //@TODO COLLISIONS
+            if (actor.isCollidable()) {
+                cs.registerActor(actor, layer);
+            }
         };
 
         this.unregisterActor = function (layer, id) {
@@ -51,11 +57,12 @@ mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
                 break;
             }
 
+            if (actor.isCollidable()) {
+                cs.unregisterActor(actor, layer);
+            }
             delete actorLayers[layer][id]._sceneLayer;
             actors.splice(actorLayers[layer][id], 1)
             delete actorLayers[layer][id];
-
-            //@TODO COLLISIONS
         };
 
         this.getActorsByLayer = function (reversed) {
@@ -67,6 +74,25 @@ mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
                 }
                 return 0;
             });
+        };
+
+        this.getActorsGroupedByLayer = function () {
+            var i = 0,
+                l = layers.length,
+                result = [],
+                actor;
+            for(; i < l; i++) {
+                if (!result[i]) {
+                    result[i] = [];
+                }
+                for(actor in layers[i]) {
+                    if (layers[i].hasOwnProperty(actor)) {
+                        result.ish(layers[i][actor]);
+                    }
+                }
+            }
+
+            return result;
         };
 
         this.getActor = function () {
@@ -100,6 +126,10 @@ mamd.define("wrcb.view.Scene", ["wrcb.utils"], function (utils) {
                 actors[actor]._draw(context);
                 context.restore();
             }
+        };
+
+        this.tick = function (timestamp) {
+            cs.tick();
         };
     };
 

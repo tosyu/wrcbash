@@ -1,4 +1,4 @@
-mamd.define("wrcb.actors.Actor", ["wrcb.utils"], function (utils) {
+mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
     return function (params) {
         var id = params.id || null,
             x = params.x || 0,

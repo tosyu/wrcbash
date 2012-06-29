@@ -1,4 +1,9 @@
-mamd.define("wrcb.Game", function () {
+mamd.define("wrcb.core.Game",
+    [
+        "wrcb.core.utils"
+    ],
+    function (utils) {
+
     var frameInterval = 1000 / 60,
         viewport,
         lastFrameTimestamp = +new Date(),
@@ -17,13 +22,16 @@ mamd.define("wrcb.Game", function () {
                 frame();
             }
             if (!!viewport
-                && !!(scene = viewport.getScene())
-                && !!(actors = scene.getActors())) {
-                actor = actors.length;
-                while (--actor >= 0) {
-                    actors[actor]._tick();
+                && !!(scene = viewport.getScene())) {
+                window.setTimeout(utils.bind(scene.tick, scene), 15);
+                if (!!(actors = scene.getActors())) {
+                    actor = actors.length;
+                    while (--actor >= 0) {
+                        window.setTimeout(utils.bind(actors[actor]._tick, actors[actor]), 15);
+                    }
                 }
             }
+
             timeoutId = window.setTimeout(loop, 10);
         },
         start = function () {
@@ -43,7 +51,7 @@ mamd.define("wrcb.Game", function () {
             console.log("game initialized, loading files");
             mamd.require([
                 "wrcb.loader.Assets",
-                "wrcb.view.Viewport",
+                "wrcb.core.Viewport",
                 "wrcb.scenes.Demo"
                 ], function (
                     assets,

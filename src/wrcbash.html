@@ -9,7 +9,7 @@
                     console.log("checking if dom is ready");
                     ready(function () {
                         console.log("dom is ready, loading main game file");
-                        mamd.require(["wrcb.Game"], function (game) {
+                        mamd.require(["wrcb.core.Game"], function (game) {
                                 game.init();
                             });
                         });

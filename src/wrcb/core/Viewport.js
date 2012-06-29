@@ -1,6 +1,6 @@
-mamd.define("wrcb.view.Viewport",
+mamd.define("wrcb.core.Viewport",
     [
-        "wrcb.utils"
+        "wrcb.core.utils"
     ],
     function (utils) {
     return function (params) {

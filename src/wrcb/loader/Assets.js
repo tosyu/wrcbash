@@ -1,4 +1,4 @@
-mamd.define("wrcb.loader.Assets", ["wrcb.utils", "wrcb.loader.Request"], function (utils, request) {
+mamd.define("wrcb.loader.Assets", ["wrcb.core.utils", "wrcb.core.Request"], function (utils, request) {
     var assets = [],
         loadedAssets = {}
         loaded = 0,

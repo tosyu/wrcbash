@@ -1,12 +1,22 @@
-mamd.define("wrcb.forces.Force", ["wrcb.utils"], function (utils) {
+mamd.define("wrcb.core.Force", ["wrcb.core.utils"], function (utils) {
     return function () {
-        var bound = [];
+        var bound = [],
+            type = null;
+
+        this.setType = function (t) {
+            type = t;
+        };
+
+        this.getType = function () {
+            return type;
+        };
 
         this._tick = function () {
             !!this.tick && this.tick();
         };
 
         this.bind = function (actor) {
+            console.log(actor.getId(), "affected by force", type);
             if (utils.indexOf(bound, actor) === -1) {
                 bound.push(actor);
             }
@@ -17,6 +27,7 @@ mamd.define("wrcb.forces.Force", ["wrcb.utils"], function (utils) {
             if ((index = utils.indexOf(bound, actor)) !== -1) {
                 bound.splice(index, 1);
             }
+            console.log(type, "stops affecting:", actor.getId());
         };
 
         this.getBound = function () {

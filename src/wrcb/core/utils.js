@@ -1,4 +1,4 @@
-mamd.define("wrcb.utils", function () {
+mamd.define("wrcb.core.utils", function () {
     return {
 
         "filter": function (arr, func, boundTo) {
