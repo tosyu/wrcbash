@@ -43,30 +43,29 @@ mamd.define(
                             actor.setRotation(r+1);
                         }
                     }
-                },
-                handleKeyUp = function (evt) {
-                    var key = event.keyCode || event.which,
-                        index;
-                    if ((index = utils.indexOf(keys, key)) !== -1 && !!key) {
-                        keys.splice(index, 1);
-                    }
-                },
-                handleKeyDown = function (evt) {
-                    var key = event.keyCode || event.which;
-                    if (utils.indexOf(keys, key) === -1 && !!key) {
-                        keys.push(key);
-                    }
                 };
 
-            utils.bindEvent(document, "keydown", handleKeyDown);
-            utils.bindEvent(document, "keyup", handleKeyUp);
+            utils.bindEvent(document, "keyup", function (evt) {
+                var key = event.keyCode || event.which,
+                    index;
+                if ((index = utils.indexOf(keys, key)) !== -1 && !!key) {
+                    keys.splice(index, 1);
+                }
+            });
+            utils.bindEvent(document, "keydown", function (evt) {
+                var key = event.keyCode || event.which;
+                if (utils.indexOf(keys, key) === -1 && !!key) {
+                    keys.push(key);
+                }
+            });
 
             this.tick = function () {
                 var key = keys.length,
                     actors = this.getBound(),
-                    actor = actors.length;
+                    actor = 0;
 
                 while (--key >= 0) {
+                    actor = actors.length
                     while (--actor >= 0) {
                         switch (keys[key]) {
                         case 38:
