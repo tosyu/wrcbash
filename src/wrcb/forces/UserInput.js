@@ -26,8 +26,8 @@ mamd.define(
                         }
                         actor.setVelocity(v);
                     } else {
-                        if (v <= 5) {
-                            v += 0.3;
+                        if (v <= 3) {
+                            v += 0.2;
                         }
                         actor.setVelocity(v);
                     }
