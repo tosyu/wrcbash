@@ -34,7 +34,10 @@ mamd.define("wrcb.view.Viewport",
             };
 
         screenAspectRatio = screen.availWidth / screen.availHeight;
-        canvasWidthStretch -= canvasWidthStretch * ((screen.availWidth - (screen.availHeight * gameAspectRatio)) / screen.availWidth)
+        // fix game dimensions
+        if (screenAspectRatio > gameAspectRatio) {
+            canvasWidthStretch -= canvasWidthStretch * ((screen.availWidth - (screen.availHeight * gameAspectRatio)) / screen.availWidth)
+        }
 
         canvas.setAttribute("width", width);
         canvas.setAttribute("height", height);
