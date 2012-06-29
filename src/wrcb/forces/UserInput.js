@@ -5,6 +5,8 @@ mamd.define(
     ],
     function (utils) {
         var affectedActor = false,
+            keys = [],
+            isApplying = false,
             verticalMove = function (negative) {
                 var p = affectedActor.getPosition(),
                     r = affectedActor.getRotation(),
@@ -15,6 +17,9 @@ mamd.define(
                         Math.sin(radians) * v
                     ];
                 if (negative) {
+                    if (v >= 0) {
+                        v = 0;
+                    }
                     if (v >= -2) {
                         v -= 0.3;
                     }
@@ -28,17 +33,52 @@ mamd.define(
                 affectedActor.setPosition(p[0] + m[0], p[1] + m[1]);
             },
             horizontalMove = function (negative) {
-                var r = affectedActor.getRotation();
-                if (negative) {
-                    affectedActor.setRotation(r-1);
-                } else {
-                    affectedActor.setRotation(r+1);
+                var r = affectedActor.getRotation(),
+                    v = affectedActor.getVelocity();
+                if (Math.abs(v) > 0) {
+                    if (negative) {
+                        affectedActor.setRotation(r-1);
+                    } else {
+                        affectedActor.setRotation(r+1);
+                    }
+                }
+            },
+            handleKeyUp = function (evt) {
+                if (!!affectedActor) {
+                    var key = event.keyCode || event.which,
+                        index;
+                    if ((index = utils.indexOf(keys, key)) >= 0 && !!key) {
+                        keys.splice(index, 1);
+                    }
                 }
             },
             handleKeyDown = function (evt) {
                 if (!!affectedActor) {
                     var key = event.keyCode || event.which;
-                    switch (key) {
+                    if (utils.indexOf(keys, key) === -1 && !!key) {
+                        keys.push(key);
+                    }
+                }
+            };
+
+        utils.bindEvent(document, "keydown", handleKeyDown);
+        utils.bindEvent(document, "keyup", handleKeyUp);
+
+        return {
+            "affects": function (actor) {
+                affectedActor = actor;
+            },
+
+            "isApplying": function () {
+                return isApplying;
+            },
+
+            "tick": function () {
+                var key = keys.length;
+                isApplying = key > 0;
+
+                while (--key >= 0) {
+                    switch (keys[key]) {
                     case 38:
                         verticalMove();
                         break;
@@ -53,13 +93,6 @@ mamd.define(
                         break;
                     }
                 }
-            };
-
-        utils.bindEvent(document, "keydown", handleKeyDown);
-
-        return {
-            "affects": function (actor) {
-                affectedActor = actor;
             }
         };
 });

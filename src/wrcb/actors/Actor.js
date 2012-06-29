@@ -18,9 +18,6 @@ mamd.define("wrcb.actors.Actor", function () {
                 : false,
             drawable = "drawable" in params
                 ? params.drawable
-                : false,
-            animated = "animated" in params
-                ? params.animated
                 : false;
 
         this.seteId = function (_id) {
@@ -36,8 +33,8 @@ mamd.define("wrcb.actors.Actor", function () {
             !!drawable && !!this.draw && this.draw(context);
         };
 
-        this._animate = function (timestamp) {
-            !!animated && !!this.animate && this.animate(timestamp);
+        this._tick = function (timestamp) {
+            !!this.tick && this.tick(timestamp);
         };
 
         this.setVelocity = function (v) {

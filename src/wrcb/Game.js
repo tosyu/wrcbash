@@ -9,8 +9,20 @@ mamd.define("wrcb.Game", function () {
             !!viewport && viewport.draw();
         },
         loop = function () {
+            var scene,
+                actors,
+                actor = 0;
+
             if (+new Date() >= (lastFrameTimestamp + frameInterval)) {
                 frame();
+            }
+            if (!!viewport
+                && !!(scene = viewport.getScene())
+                && !!(actors = scene.getActors())) {
+                actor = actors.length;
+                while (--actor >= 0) {
+                    actors[actor]._tick();
+                }
             }
             timeoutId = window.setTimeout(loop, 10);
         },

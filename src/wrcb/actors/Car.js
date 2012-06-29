@@ -26,6 +26,10 @@ mamd.define(
 
             context.drawImage(carSprite, 0, 0, d[0], d[1]);
         };
+
+        this.tick = function () {
+            userInput.tick();
+        };
     };
 
     Car.prototype = new Actor({
