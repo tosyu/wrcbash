@@ -1,4 +1,4 @@
-mamd.define("wrcb.actors.Actor", function () {
+mamd.define("wrcb.actors.Actor", ["wrcb.utils"], function (utils) {
     return function (params) {
         var id = params.id || null,
             x = params.x || 0,
@@ -7,6 +7,7 @@ mamd.define("wrcb.actors.Actor", function () {
             width = params.width || 0,
             height = params.height || 0,
             rotation = params.rotation || 0,
+            forces = [],
             collidable = "collidable" in params
                 ? params.collidable
                 : false,
@@ -34,6 +35,10 @@ mamd.define("wrcb.actors.Actor", function () {
         };
 
         this._tick = function (timestamp) {
+            var force = forces.length;
+            while (--force >= 0) {
+                !!forces[force].tick && forces[force].tick();
+            }
             !!this.tick && this.tick(timestamp);
         };
 
@@ -107,6 +112,30 @@ mamd.define("wrcb.actors.Actor", function () {
                     edges.push([coords[i], coords[iNext]]);
                 }
             return edges;
+        };
+
+        this.addForce = function (force) {
+            if (utils.indexOf(forces, force) === -1) {
+                force.affects(this);
+                forces.push(force);
+            }
+        };
+
+        this.removeForce = function (force) {
+            var index;
+            if ((index = utils.indexOf(forces, force)) !== -1) {
+                forces.splice(index, 1);
+            }
+        };
+
+        this.getForces = function () {
+            return forces;
+        };
+
+        this.getForcesApplying = function () {
+            return utils.filter(forces, function (force) {
+                return force.isApplying();
+            });
         };
 
         this.cornerCollisionWith = function (corner, actor) {};

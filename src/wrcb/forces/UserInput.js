@@ -47,7 +47,7 @@ mamd.define(
                 if (!!affectedActor) {
                     var key = event.keyCode || event.which,
                         index;
-                    if ((index = utils.indexOf(keys, key)) >= 0 && !!key) {
+                    if ((index = utils.indexOf(keys, key)) !== -1 && !!key) {
                         keys.splice(index, 1);
                     }
                 }

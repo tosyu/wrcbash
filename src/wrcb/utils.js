@@ -1,6 +1,24 @@
 mamd.define("wrcb.utils", function () {
     return {
 
+        "filter": function (arr, func, boundTo) {
+            var bound = boundTo || arr,
+                l = arr.length,
+                i = 0,
+                result = [];
+            if ("filter" in arr) {
+                return arr.filter.call(bound, func);
+            }
+
+            for (; i < l; i++) {
+                if (!!func.call(boundTo, arr[i], i, arr)) {
+                    result.push(arr[i]);
+                }
+            }
+
+            return result;
+        },
+
         "bind": function (func, oThis) {
 
             if (typeof func !== "function") {

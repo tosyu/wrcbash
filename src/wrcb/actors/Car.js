@@ -4,14 +4,16 @@ mamd.define(
         "wrcb.utils",
         "wrcb.loader.Assets",
         "wrcb.actors.Actor",
-        "wrcb.forces.UserInput"
+        "wrcb.forces.UserInput",
+        "wrcb.forces.Inertia"
     ],
-    function (utils, assets, Actor, userInput) {
+    function (utils, assets, Actor, userInput, inertia) {
 
     var Car = function () {
         var carSprite = assets.get("assets/images/car_white_red_stripes.png");
 
-        userInput.affects(this);
+        this.addForce(userInput);
+        this.addForce(inertia);
 
         this.draw = function (context) {
             var p = this.getPosition(),
@@ -25,10 +27,6 @@ mamd.define(
             context.translate(-center[0], -center[1]);
 
             context.drawImage(carSprite, 0, 0, d[0], d[1]);
-        };
-
-        this.tick = function () {
-            userInput.tick();
         };
     };
 
