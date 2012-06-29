@@ -20,7 +20,7 @@ mamd.define("wrcb.loader.Assets", ["wrcb.utils", "wrcb.loader.Request"], functio
             }
         },
         handleAssetLoad = function (url, evt) {
-            console.log(arguments);
+            console.log("loaded", url);
             loadedAssets[url] = evt.currentTarget;
             loaded++;
             checkState();

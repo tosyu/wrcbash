@@ -39,7 +39,7 @@ mamd.define("wrcb.actors.Actor", ["wrcb.utils"], function (utils) {
             while (--force >= 0) {
                 !!forces[force].tick && forces[force].tick();
             }
-            !!this.tick && this.tick(timestamp);
+            !!this.tick && window.setTimeout(utils.bind(this.tick, this, timestamp), 15);
         };
 
         this.setVelocity = function (v) {
@@ -131,12 +131,6 @@ mamd.define("wrcb.actors.Actor", ["wrcb.utils"], function (utils) {
 
         this.getForces = function () {
             return forces;
-        };
-
-        this.getForcesApplying = function () {
-            return utils.filter(forces, function (force) {
-                return force.isApplying();
-            });
         };
 
         this.cornerCollisionWith = function (corner, actor) {};
