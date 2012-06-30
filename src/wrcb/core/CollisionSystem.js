@@ -2,11 +2,12 @@ mamd.define("wrcb.core.CollisionSystem", function () {
     return function () {
         var collidersLayers = [],
             actorsLayers = [],
-            boxOvelapsWith = function (box1, box2) {
-                var i = 0, imax = box1.length;
+            boxOverlapsWith = function (box1, box2) {
+                var i = 0,
+                    imax = box1.length;
                 for (; i < imax; i++) {
-                    if (Math.min(box2[0].x, box2[1].x) <= box1[i].x && box1[i].x <= Math.max(box2[0].x, box2[1].x)
-                     && Math.min(box2[1].y, box2[2].y) <= box1[i].y && box1[i].y <= Math.max(box2[1].y, box2[2].y)) { // since it's a rectangle we dont need to test all coords
+                    if (Math.min(box2[0][0], box2[1][0]) <= box1[i][0] && box1[i][0] <= Math.max(box2[0][0], box2[1][0])
+                     && Math.min(box2[1][1], box2[2][1]) <= box1[i][1] && box1[i][1] <= Math.max(box2[1][1], box2[2][1])) { // since it"s a rectangle we dont need to test all coords
                          return i;
                      }
                 }
@@ -16,52 +17,121 @@ mamd.define("wrcb.core.CollisionSystem", function () {
                 if (rotation === 0) {
                     return edges;
                 }
-                var radius = Math.max(edges[0]['p2']['x'], edges[1]['p1']['x']) - Math.min(edges[0]['p2']['x'], edges[1]['p1']['x']), i,
-                xOffset = edges[0]['p1']['x'], yOffset = edges[0]['p1']['y'];
-                for (i in edges) {
+                var radius = Math.max(edges[0][1][0], edges[1][0][0]) - Math.min(edges[0][1][0], edges[1][0][0]),
+                    i = 0,
+                    l = edges.length,
+                    xOffset = edges[0][0][0],
+                    yOffset = edges[0][0][1];
+                for (; i < l; i++) {
                     // origin of rotation should bee 0,0 of the object nt grid
-                    edges[i]['p1']['x'] -= xOffset;
-                    edges[i]['p1']['y'] -= yOffset;
-                    edges[i]['p2']['x'] -= xOffset;
-                    edges[i]['p2']['y'] -= yOffset;
+                    edges[i][0][0] -= xOffset;
+                    edges[i][0][1] -= yOffset;
+                    edges[i][1][0] -= xOffset;
+                    edges[i][1][1] -= yOffset;
 
                     // rotate
-                    edges[i]['p1']['x'] = parseInt(Math.cos(radius) * edges[i]['p1']['x'] - Math.sin(radius) * edges[i]['p1']['y']);
-                    edges[i]['p1']['y'] = parseInt(Math.sin(radius) * edges[i]['p1']['x'] + Math.cos(radius) * edges[i]['p1']['y']);
-                    edges[i]['p2']['x'] = parseInt(Math.cos(radius) * edges[i]['p2']['x'] - Math.sin(radius) * edges[i]['p2']['y']);
-                    edges[i]['p2']['y'] = parseInt(Math.sin(radius) * edges[i]['p2']['x'] + Math.cos(radius) * edges[i]['p2']['y']);
+                    edges[i][0][0] = parseInt(Math.cos(radius) * edges[i][0][0] - Math.sin(radius) * edges[i][0][1]);
+                    edges[i][0][1] = parseInt(Math.sin(radius) * edges[i][0][0] + Math.cos(radius) * edges[i][0][1]);
+                    edges[i][1][0] = parseInt(Math.cos(radius) * edges[i][1][0] - Math.sin(radius) * edges[i][1][1]);
+                    edges[i][1][1] = parseInt(Math.sin(radius) * edges[i][1][0] + Math.cos(radius) * edges[i][1][1]);
 
                     // end add offset back
-                    edges[i]['p1']['x'] += xOffset;
-                    edges[i]['p1']['y'] += yOffset;
-                    edges[i]['p2']['x'] += xOffset;
-                    edges[i]['p2']['y'] += yOffset;
+                    edges[i][0][0] += xOffset;
+                    edges[i][0][1] += yOffset;
+                    edges[i][1][0] += xOffset;
+                    edges[i][1][1] += yOffset;
                 }
                 return edges;
             },
             getBoundingBoxFromEdgeCorners = function (edge) {
-                var a = Math.max(edge['p1']['x'], edge['p2']['x']) - Math.min(edge['p1']['x'], edge['p2']['x']),
-                    b = Math.max(edge['p1']['y'], edge['p2']['y']) - Math.min(edge['p1']['y'], edge['p2']['y']),
+                var a = Math.max(edge[0][0], edge[1][0]) - Math.min(edge[0][0], edge[1][0]),
+                    b = Math.max(edge[0][1], edge[1][1]) - Math.min(edge[0][1], edge[1][1]),
                     modifier = a > b ? parseInt(a/2) : parseInt(b/2);
-                return {'box1': [{'x': edge['p1']['x'] - modifier, 'y': edge['p1']['y'] - modifier},
-                                 {'x': edge['p1']['x'] + modifier, 'y': edge['p1']['y'] - modifier},
-                                 {'x': edge['p1']['x'] + modifier, 'y': edge['p1']['y'] + modifier},
-                                 {'x': edge['p1']['x'] - modifier, 'y': edge['p1']['y'] + modifier}],
-                        'box2': [{'x': edge['p2']['x'] - modifier, 'y': edge['p2']['y'] - modifier},
-                                 {'x': edge['p2']['x'] + modifier, 'y': edge['p2']['y'] - modifier},
-                                 {'x': edge['p2']['x'] + modifier, 'y': edge['p2']['y'] + modifier},
-                                 {'x': edge['p2']['x'] - modifier, 'y': edge['p2']['y'] + modifier}]};
+                return [
+                            [edge[0][0] - modifier, edge[0][1] - modifier],
+                            [edge[0][0] + modifier, edge[0][1] - modifier],
+                            [edge[0][0] + modifier, edge[0][1] + modifier],
+                            [edge[0][0] - modifier, edge[0][1] + modifier]
+                        ],
+                        [
+                            [edge[1][0] - modifier, edge[1][1] - modifier],
+                            [edge[1][0] + modifier, edge[1][1] - modifier],
+                            [edge[1][0] + modifier, edge[1][1] + modifier],
+                            [edge[1][0] - modifier, edge[1][1] + modifier]
+                        ];
             },
             getBoundingBoxFromEdge = function (edge) {
-                var modifier = parseInt(Math.sqrt(Math.pow((edge['p2']['x'] - edge['p1']['x']), 2) + Math.pow((edge['p2']['y'] - edge['p1']['y']), 2)) / 3);
-                return [{'x': edge['p1']['x'] - modifier, 'y': edge['p1']['y'] - modifier},
-                        {'x': edge['p1']['x'] + modifier, 'y': edge['p1']['y'] - modifier},
-                        {'x': edge['p2']['x'] + modifier, 'y': edge['p2']['y'] + modifier},
-                        {'x': edge['p2']['x'] - modifier, 'y': edge['p2']['y'] + modifier}];
+                var modifier = parseInt(Math.sqrt(Math.pow((edge[1][0] - edge[0][0]), 2) + Math.pow((edge[1][1] - edge[0][1]), 2)) / 3);
+                return [
+                            [edge[0][0] - modifier, edge[0][1] - modifier],
+                            [edge[0][0] + modifier, edge[0][1] - modifier],
+                            [edge[1][0] + modifier, edge[1][1] + modifier],
+                            [edge[1][0] - modifier, edge[1][1] + modifier]
+                       ];
             },
             detect = function () {
-                var i, x, a, boundingBox, actorEdges, colliderEdges, corner, edgeBoundingBox, edgeCorner, colliderBoundingBox, edgeCornerBBoxes;
-                for (i in this.colliders) {
+                var i,
+                    x,
+                    a,
+                    boundingBox,
+                    actorEdges,
+                    colliderEdges,
+                    corner,
+                    edgeBoundingBox,
+                    edgeCorner,
+                    colliderBoundingBox,
+                    edgeCornerBBoxes;
+
+                var layer = collidersLayers.length,
+                    collider = null,
+                    actor = null,
+                    colliderEdges = null,
+                    colliderBoundingBox = null,
+                    actorBoundingBox = null,
+                    colliderEdgeBoundingBox = null,
+                    colliderEdgeCornerBoundingBoxes = null,
+                    colliderEdgeCorner = null,
+                    colliderEdge = null,
+                    colliderCorner = null;
+
+                while (--layer >= 0) {
+                    collider = !!collidersLayers[layer] && collidersLayers[layer].length;
+                    if (!collider || collider === 0) {
+                        continue;
+                    }
+                    while (--collider >= 0) {
+                        actor = !!actorsLayers[layer] && actorsLayers[layer].length;
+                        if (!actor || actor === 0) {
+                            continue;
+                        }
+                        colliderEdges = rotateEdges(collidersLayers[layer][collider].getEdges(), collidersLayers[layer][collider].getRotation());
+                        colliderBoundingBox = collidersLayers[layer][collider].getBoundingBox();
+                        while (--actor >= 0) {
+                            actorBoundingBox = actorsLayers[layer][actor].getBoundingBox();
+                            if (actorsLayers[layer][actor] !== collidersLayers[layer][collider]
+                                && (colliderCorner = boxOverlapsWith(colliderBoundingBox, actorBoundingBox)) !== false) {
+                                // collision?
+                                colliderEdge = colliderEdges.length;
+                                while (--colliderEdge >= 0) {
+                                    colliderEdgeBoundingBox = getBoundingBoxFromEdge(colliderEdges[colliderEdge]);
+                                    if ((colliderEdgeCorner = boxOverlapsWith(colliderEdgeBoundingBox, actorBoundingBox)) !== false) {
+                                        colliderEdgeCornerBoundingBoxes = getBoundingBoxFromEdgeCorners(colliderEdges[colliderEdge]);
+                                        if (boxOverlapsWith(colliderEdgeCornerBoundingBoxes[0], actorBoundingBox) !== false
+                                            && boxOverlapsWith(colliderEdgeCornerBoundingBoxes[1], actorBoundingBox) !== false) {
+                                            collidersLayers[layer][collider].edgeCollisionWith(colliderEdge, actorsLayers[layer][actor]);
+                                            actorsLayers[layer][actor].pointCollisionWith(colliderEdgeCorner, collidersLayers[layer][collider]);
+                                        }
+                                    }
+                                }
+                                collidersLayers[layer][collider].cornerCollisionWith(colliderCorner, actorsLayers[layer][actor]);
+                                actorsLayers[layer][actor].pointCollisionWith(colliderBoundingBox[colliderCorner], collidersLayers[layer][collider]);
+                            }
+                        }
+                    }
+                }
+
+
+                /*for (i in this.colliders) {
                     if (this.colliders.hasOwnProperty(i)) {
                         colliderEdges = this.edgesRotate(this.colliders[i].getEdges(), this.colliders[i].getRotation());
                         colliderBoundingBox = this.colliders[i].getBoundingBox();
@@ -72,9 +142,9 @@ mamd.define("wrcb.core.CollisionSystem", function () {
                                         edgeBoundingBox = this.getBoundingBoxFromEdge(colliderEdges[a]);
                                         if ((edgeCorner = this.boxOverlapsWith(edgeBoundingBox, this.actors[x].getBoundingBox())) !== false) {
                                             edgeCornerBBoxes = this.getBoundingBoxFromEdgeCorners(colliderEdges[a]);
-                                            if (this.boxOverlapsWith(edgeCornerBBoxes['box1'], this.actors[x].getBoundingBox()) !== false
-                                             && this.boxOverlapsWith(edgeCornerBBoxes['box2'], this.actors[x].getBoundingBox()) !== false) {
-                                                this.colliders[i].edgeCollisionWith(parseInt(a), this.actors[x]);
+                                            if (this.boxOverlapsWith(edgeCornerBBoxes["box1"], this.actors[x].getBoundingBox()) !== false
+                                             && this.boxOverlapsWith(edgeCornerBBoxes["box2"], this.actors[x].getBoundingBox()) !== false) {
+                                                this.colliders[i].edgeCollisioboxOverlapsWith() nWith(parseInt(a), this.actors[x]);
                                                 this.actors[x].pointCollisionWith(edgeBoundingBox[corner], this.colliders[i]);
                                             }
                                         }
@@ -88,22 +158,22 @@ mamd.define("wrcb.core.CollisionSystem", function () {
                         }
 
                         if (this.colliders[i].isCollidingWithScreen() === true) {
-                            if (colliderBoundingBox[0]['x'] <= 0) {
+                            if (colliderBoundingBox[0]["x"] <= 0) {
                                 this.colliders[i].edgeCollisionWith(3); //wall left side bump
-                            } else if (colliderBoundingBox[1]['x'] >= this.scene.viewport.width) {
+                            } else if (colliderBoundingBox[1]["x"] >= this.scene.viewport.width) {
                                 this.colliders[i].edgeCollisionWith(1); //wall right side bump
                             }
 
-                            if (colliderBoundingBox[0]['y'] <= 0) {
+                            if (colliderBoundingBox[0]["y"] <= 0) {
                                 this.colliders[i].edgeCollisionWith(0); //wall top side bump
-                            } else if (colliderBoundingBox[2]['y'] >= this.scene.viewport.height) {
+                            } else if (colliderBoundingBox[2]["y"] >= this.scene.viewport.height) {
                                 this.colliders[i].edgeCollisionWith(2); //wall bottom side bump
                             }
                         }
                         colliderEdges = null;
                         colliderBoundingBox = null;
                     }
-                }
+                }*/
             };
 
         this.registerActor = function (actor, layer) {

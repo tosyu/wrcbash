@@ -48,17 +48,21 @@ mamd.define(
             this.setType("UserInput");
 
             utils.bindEvent(document, "keyup", function (evt) {
-                var key = event.keyCode || event.which,
+                var key = evt.keyCode || evt.which,
                     index;
                 if ((index = utils.indexOf(keys, key)) !== -1 && !!key) {
                     keys.splice(index, 1);
                 }
+                evt.preventDefault();
+                evt.stopPropagation();
             });
             utils.bindEvent(document, "keydown", function (evt) {
-                var key = event.keyCode || event.which;
+                var key = evt.keyCode || evt.which;
                 if (utils.indexOf(keys, key) === -1 && !!key) {
                     keys.push(key);
                 }
+                evt.preventDefault();
+                evt.stopPropagation();
             });
 
             this.tick = function () {

@@ -31,6 +31,24 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
         };
 
         this._draw = function (context) {
+            var edges = this.getEdges(),
+                edge = edges.length;
+            if (DEBUG) {
+                context.save();
+                context.strokeStyle = utils.getColor(
+                    Math.floor((Math.random()*255)+1),
+                    Math.floor((Math.random()*255)+1),
+                    Math.floor((Math.random()*255)+1));
+                context.beginPath();
+                context.moveTo(edges[edge - 1][0][0], edges[edge - 1][0][1]);
+                while (--edge >= 0) {
+                    context.lineTo(edges[edge][0][0], edges[edge][0][1]);
+                }
+                context.closePath();
+                context.stroke();
+            }
+
+            context.restore();
             !!drawable && !!this.draw && this.draw(context);
         };
 
@@ -100,7 +118,7 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
         };
 
         this.getCoordinates = function () {
-            return this.getBoundingBox;
+            return this.getBoundingBox();
         };
 
         this.getEdges = function () {
