@@ -48,6 +48,8 @@ mamd.define("wrcb.core.Game",
         };
     return {
         "init": function () {
+            window.DEBUG = !!document.body.getAttribute("debug")
+                && document.body.getAttribute("debug") === "true";
             console.log("game initialized, loading files");
             mamd.require([
                 "wrcb.loader.Assets",

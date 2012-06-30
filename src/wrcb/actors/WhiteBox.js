@@ -11,7 +11,7 @@ mamd.define(
                 var p = this.getPosition(),
                     d = this.getDimensions();
                 context.translate(p[0], p[1]);
-                context.fillStyle = utils.getColor(255,255,255);
+                context.fillStyle = utils.getColor(139,69,19);
                 context.fillRect(0, 0, d[0], d[1]);
             };
 

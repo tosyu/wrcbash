@@ -19,7 +19,11 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
                 : false,
             drawable = "drawable" in params
                 ? params.drawable
-                : false;
+                : false,
+            debugColor = utils.getColor(
+                    Math.floor((Math.random()*255)+1),
+                    Math.floor((Math.random()*255)+1),
+                    Math.floor((Math.random()*255)+1));
 
         this.seteId = function (_id) {
             //!!(typeof _id !== "string") && throw "Actor id must be string";
@@ -35,10 +39,7 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
                 edge = edges.length;
             if (DEBUG) {
                 context.save();
-                context.strokeStyle = utils.getColor(
-                    Math.floor((Math.random()*255)+1),
-                    Math.floor((Math.random()*255)+1),
-                    Math.floor((Math.random()*255)+1));
+                context.strokeStyle = debugColor;
                 context.beginPath();
                 context.moveTo(edges[edge - 1][0][0], edges[edge - 1][0][1]);
                 while (--edge >= 0) {
@@ -46,9 +47,9 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
                 }
                 context.closePath();
                 context.stroke();
+                context.restore();
             }
 
-            context.restore();
             !!drawable && !!this.draw && this.draw(context);
         };
 
