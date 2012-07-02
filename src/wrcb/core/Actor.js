@@ -8,6 +8,7 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
             height = params.height || 0,
             rotation = params.rotation || 0,
             forces = [],
+            layer = null,
             collidable = "collidable" in params
                 ? params.collidable
                 : false,
@@ -61,6 +62,18 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
 
             }
             !!this.tick && window.setTimeout(utils.bind(this.tick, this, timestamp), 15);
+        };
+
+        this._setLayer = function (l) {
+            layer = l;
+        };
+
+        this._getLayer = function () {
+            return layer;
+        };
+
+        this._forgetLayer = function () {
+            layer = null;
         };
 
         this.setVelocity = function (v) {

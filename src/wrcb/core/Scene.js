@@ -5,7 +5,7 @@ mamd.define("wrcb.core.Scene",
     ], function (utils, CollisionSystem) {
     var Scene = function () {
         var layers = [0,1,2,3,4],
-            actorLayers = {},
+            actorsByLayer = {},
             actors = [],
             collisions = new CollisionSystem();
 
@@ -29,12 +29,12 @@ mamd.define("wrcb.core.Scene",
                 break;
             }
 
-            actors._sceneLayer = layer;
+            actor._setLayer(layer);
             actors.push(actor);
-            if (!actorLayers[layer]) {
-                actorLayers[layer] = {};
+            if (!actorsByLayer[layer]) {
+                actorsByLayer[layer] = {};
             }
-            actorLayers[layer][id] = utils.indexOf(actors, actor);
+            actorsByLayer[layer][id] = utils.indexOf(actors, actor);
             if (actor.isCollidable()) {
                 collisions.registerActor(actor);
             }
@@ -57,17 +57,18 @@ mamd.define("wrcb.core.Scene",
                 break;
             }
 
+            var actor = actors[actorsByLayer[layer][id]];
             if (actor.isCollidable()) {
                 collisions.unregisterActor(actor);
             }
-            delete actorLayers[layer][id]._sceneLayer;
-            actors.splice(actorLayers[layer][id], 1)
-            delete actorLayers[layer][id];
+            actor._forgetLayer();;
+            actors.splice(actorsByLayer[layer][id], 1)
+            delete actorsByLayer[layer][id];
         };
 
         this.getActorsByLayer = function (reversed) {
-            return actors.sort(function (actor1, actor2) {
-                if (actor1._sceneLayer < actor2._sceneLayer) {
+            return actors.slice().sort(function (actor1, actor2) {
+                if (actor1._getLayer() < actor2._getLayer()) {
                     return reversed ? 1 : -1;
                 } else if (actor1._sceneLayer > actor2._sceneLayer) {
                     return reversed ? -1 : 1;
@@ -111,7 +112,7 @@ mamd.define("wrcb.core.Scene",
                 break;
             }
 
-            return actorLayers[layer][id];
+            return actorsByLayer[layer][id];
         };
 
         this.setCamera = function (c) {
@@ -131,7 +132,7 @@ mamd.define("wrcb.core.Scene",
                 actor = _actors.length;
             while (--actor >= 0) {
                 context.save();
-                actors[actor]._draw(context);
+                _actors[actor]._draw(context);
                 context.restore();
             }
         };

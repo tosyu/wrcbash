@@ -41,8 +41,8 @@ mamd.define(
         };
 
         Car.prototype = new Actor({
-            "x": -32, // start at center
-            "y": -32, // start at center
+            "x": 25, // start at center
+            "y": 80, // start at center
             "width": 64,
             "height": 64,
             "drawable": true,

@@ -38,9 +38,9 @@ mamd.define(
                         v = actor.getVelocity();
                     if (Math.abs(v) > 0) {
                         if (negative) {
-                            actor.setRotation(r-1.7);
+                            actor.setRotation(r-2.5);
                         } else {
-                            actor.setRotation(r+1.7);
+                            actor.setRotation(r+2.5);
                         }
                     }
                 };
