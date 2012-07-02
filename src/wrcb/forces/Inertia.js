@@ -13,7 +13,7 @@ mamd.define(
                 var p = actor.getPosition(),
                     r = actor.getRotation(),
                     radians = r * Math.PI / 180,
-                    v = actor.getVelocity() * modifier,
+                    v = actor.getVelocity(),// * modifier,
                     m = [
                         Math.cos(radians) * v,
                         Math.sin(radians) * v
