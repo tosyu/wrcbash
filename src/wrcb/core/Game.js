@@ -13,8 +13,6 @@ mamd.define("wrcb.core.Game",
         requestFrame = utils.getRequestFrameFunction(),
         draw = function (current) {
             var modifier = (current - lastFrame) / goldFrameTime;
-            //window.document.title = (current - lastFrame) / frames * 1000;
-            //console.log(current - started);
             !!viewport && !!viewport.draw && viewport.draw(current, modifier);
             lastFrame = current;
             frames++;
