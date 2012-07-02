@@ -6,7 +6,7 @@ mamd.define("wrcb.core.utils", function () {
             || window.oRequestAnimationFrame
             || window.msRequestAnimationFrame
             || function (callback){
-                window.setTimeout(callback, goldFrameTime);
+                window.setTimeout(callback, 1000 / 60);
             };
     })();
 
