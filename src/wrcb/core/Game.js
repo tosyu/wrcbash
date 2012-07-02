@@ -9,16 +9,27 @@ mamd.define("wrcb.core.Game",
         lastFrame = +new Date(),
         lastTick = +new Date();
         started = false,
+        drawing = false,
+        ticking = false,
         frames = 0,
         requestFrame = utils.getRequestFrameFunction(),
         draw = function (current) {
+            if (drawing) {
+                return false;
+            }
+            drawing = true;
             var modifier = (current - lastFrame) / goldFrameTime;
             !!viewport && !!viewport.draw && viewport.draw(current, modifier);
             lastFrame = current;
             frames++;
             requestFrame(draw);
+            drawing = false;
         },
         tick = function (current) {
+            if (ticking) {
+                return false;
+            }
+            ticking = true;
             var modifier = (current - lastTick) / goldFrameTime;
             if (!!viewport
                 && !!(scene = viewport.getScene())) {
@@ -35,6 +46,7 @@ mamd.define("wrcb.core.Game",
 
             lastTick = current;
             requestFrame(tick);
+            ticking = false;
         },
         start = function () {
             if (!started) {

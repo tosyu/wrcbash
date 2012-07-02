@@ -13,8 +13,7 @@ mamd.define("wrcb.core.Viewport",
             scenes = {},
             canvas = document.createElement("canvas");
             context = canvas.getContext("2d"),
-            bufferContext = null,
-            drawing = false,
+            bufferContext = null
             _self = this;
 
         screenAspectRatio = screen.availWidth / screen.availHeight;
@@ -41,10 +40,6 @@ mamd.define("wrcb.core.Viewport",
                 camera = null,
                 zoom = 1;
 
-            if (drawing) {
-                return false;
-            }
-
             drawing = true;
             if (!!(scene = _self.getScene())
                 && !!(camera = scene.getCamera())) {
@@ -62,8 +57,6 @@ mamd.define("wrcb.core.Viewport",
             }
 
             context.drawImage(bufferContext.canvas, 0, 0);
-
-            drawing = false;
         };
 
         this.addScene = function (sceneId, scene) {
