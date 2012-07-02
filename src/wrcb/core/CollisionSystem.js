@@ -129,7 +129,7 @@ mamd.define("wrcb.core.CollisionSystem", function () {
             }
             actors.push(actor);
 
-            console.log(actor.getId(), "registered in collision system");
+            DEBUG && console.log(actor.getId(), "registered in collision system");
         };
 
         this.unregisterActor = function (actor) {
@@ -143,7 +143,7 @@ mamd.define("wrcb.core.CollisionSystem", function () {
 
             if ((index = utils.indexOf(actors, actor)) !== -1) {
                 actors.splice(index, 1);
-                console.log(actor.getId(), "unregistered in collision system");
+                DEBUG && console.log(actor.getId(), "unregistered in collision system");
             }
         };
 

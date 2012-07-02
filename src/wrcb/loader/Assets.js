@@ -20,7 +20,7 @@ mamd.define("wrcb.loader.Assets", ["wrcb.core.utils", "wrcb.core.Request"], func
             }
         },
         handleAssetLoad = function (url, evt) {
-            console.log("loaded", url);
+            DEBUG && console.log("loaded", url);
             loadedAssets[url] = evt.currentTarget;
             loaded++;
             checkState();
@@ -39,7 +39,7 @@ mamd.define("wrcb.loader.Assets", ["wrcb.core.utils", "wrcb.core.Request"], func
                 aud,
                 url;
             while (--i >= 0) {
-                console.log("loading", assets[i].url);
+                DEBUG && console.log("loading", assets[i].url);
                 url = assets[i].url;
                 switch (assets[i].type) {
                 case "image":
@@ -63,7 +63,7 @@ mamd.define("wrcb.loader.Assets", ["wrcb.core.utils", "wrcb.core.Request"], func
         "load": function (callback) {
             onLoad = callback || false;
             mamd.require(["assets.assets"], function (data) {
-                console.log("loaded descriptor", data);
+                DEBUG && console.log("loaded descriptor", data);
                 var i = data.images && data.images.length || 0;
                 while (--i >= 0) {
                     add(data.images[i], "image");

@@ -14,14 +14,15 @@ mamd.define(
                 actor = a;
             };
 
-            this.tick = function () {
+            this.tick = function (timestamp, modifier) {
                 if (actor) {
                     var p = actor.getPosition(),
                         cp = this.getPosition(),
-                        d = actor.getDimensions();
+                        d = actor.getDimensions(),
+                        factor = responseFactor * modifier;
                     this.setPosition(
-                        cp[0] * (1 - responseFactor) + (p[0] + d[0] / 2) * responseFactor,
-                        cp[1] * (1 - responseFactor) + (p[1] + d[1] / 2) * responseFactor);
+                        cp[0] * (1 - factor) + (p[0] + d[0] / 2) * factor,
+                        cp[1] * (1 - factor) + (p[1] + d[1] / 2) * factor);
                 }
             };
         };

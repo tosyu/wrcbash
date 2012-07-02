@@ -16,7 +16,7 @@ mamd.define("wrcb.core.Force", ["wrcb.core.utils"], function (utils) {
         };
 
         this.bind = function (actor) {
-            console.log(actor.getId(), "affected by force", type);
+            DEBUG && console.log(actor.getId(), "affected by force", type);
             if (utils.indexOf(bound, actor) === -1) {
                 bound.push(actor);
             }
@@ -27,7 +27,7 @@ mamd.define("wrcb.core.Force", ["wrcb.core.utils"], function (utils) {
             if ((index = utils.indexOf(bound, actor)) !== -1) {
                 bound.splice(index, 1);
             }
-            console.log(type, "stops affecting:", actor.getId());
+            DEBUG && console.log(type, "stops affecting:", actor.getId());
         };
 
         this.getBound = function () {

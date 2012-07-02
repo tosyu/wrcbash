@@ -22,8 +22,8 @@ mamd.define("wrcb.core.Camera", function () {
             zoom = z;
         };
 
-        this._tick = function () {
-            !!this.tick && this.tick();
+        this._tick = function (timestamp, modifier) {
+            !!this.tick && this.tick(timestamp, modifier);
         };
     };
     return Camera;

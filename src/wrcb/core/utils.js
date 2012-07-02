@@ -1,4 +1,15 @@
 mamd.define("wrcb.core.utils", function () {
+    var requestFrame = (function () {
+        return window.requestAnimationFrame
+            || window.webkitRequestAnimationFrame
+            || window.mozRequestAnimationFrame
+            || window.oRequestAnimationFrame
+            || window.msRequestAnimationFrame
+            || function (callback){
+                window.setTimeout(callback, goldFrameTime);
+            };
+    })();
+
     return {
 
         "filter": function (arr, func, boundTo) {
@@ -17,6 +28,10 @@ mamd.define("wrcb.core.utils", function () {
             }
 
             return result;
+        },
+
+        "getRequestFrameFunction": function () {
+            return requestFrame;
         },
 
         "bind": function (func, oThis) {

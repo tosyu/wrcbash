@@ -35,7 +35,7 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
             return id;
         };
 
-        this._draw = function (context) {
+        this._draw = function (context, timestamp, modifier) {
             var edges = this.getEdges(),
                 edge = edges.length;
             if (DEBUG) {
@@ -51,17 +51,19 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
                 context.restore();
             }
 
-            !!drawable && !!this.draw && this.draw(context);
+            !!drawable && !!this.draw && this.draw(context, timestamp, modifier);
         };
 
-        this._tick = function (timestamp) {
+        this._tick = function (timestamp, modifier) {
             var force = forces.length;
             while (--force >= 0) {
-                !!forces[force].tick
-                    && window.setTimeout(utils.bind(forces[force].tick, forces[force], timestamp), 15);
+                !!forces[force].tick && forces[force].tick(timestamp, modifier);
+                /*!!forces[force].tick
+                    && window.setTimeout(utils.bind(forces[force].tick, forces[force], timestamp), 15);*/
 
             }
-            !!this.tick && window.setTimeout(utils.bind(this.tick, this, timestamp), 15);
+            !!this.tick && this.tick(timestamp, modifier);
+            //!!this.tick && window.setTimeout(utils.bind(this.tick, this, timestamp), 15);
         };
 
         this._setLayer = function (l) {

@@ -6,12 +6,14 @@ mamd.define(
     ],
     function (Force, utils) {
         Inertia = function () {
+            var timestamp = 0,
+                modifier = 1;
             var move = function (actor, negative) {
 
                 var p = actor.getPosition(),
                     r = actor.getRotation(),
                     radians = r * Math.PI / 180,
-                    v = actor.getVelocity(),
+                    v = actor.getVelocity() * modifier,
                     m = [
                         Math.cos(radians) * v,
                         Math.sin(radians) * v
@@ -34,9 +36,12 @@ mamd.define(
 
             this.setType("Inertia");
 
-            this.tick = function () {
+            this.tick = function (t, m) {
                 var actors = this.getBound(),
                     actor = actors.length;
+
+                timestamp = t;
+                modifier = m;
 
                 while (--actor >= 0) {
                     move(actors[actor], actors[actor].getVelocity() < 0);

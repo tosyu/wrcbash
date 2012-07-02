@@ -88,7 +88,7 @@ mamd.define("wrcb.core.Scene",
                 }
                 for(actor in layers[i]) {
                     if (layers[i].hasOwnProperty(actor)) {
-                        result.ish(layers[i][actor]);
+                        result.push(layers[i][actor]);
                     }
                 }
             }
@@ -127,19 +127,19 @@ mamd.define("wrcb.core.Scene",
             return actors;
         };
 
-        this.draw = function (context) {
+        this.draw = function (context, timestamp, modifier) {
             var _actors = this.getActorsByLayer(true),
                 actor = _actors.length;
             while (--actor >= 0) {
                 context.save();
-                _actors[actor]._draw(context);
+                _actors[actor]._draw(context, timestamp, modifier);
                 context.restore();
             }
         };
 
-        this.tick = function (timestamp) {
-            collisions.tick();
-            camera._tick();
+        this.tick = function (timestamp, modifier) {
+            collisions.tick(timestamp, modifier);
+            camera._tick(timestamp, modifier);
         };
     };
 

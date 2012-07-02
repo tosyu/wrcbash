@@ -14,21 +14,8 @@ mamd.define("wrcb.core.Viewport",
             canvas = document.createElement("canvas");
             context = canvas.getContext("2d"),
             bufferContext = null,
-            _self = this,
-            getContext = function () {
-                return bufferContext;
-            },
-            swapBuffers = function () {
-                context.clearRect(0, 0, width, height)
-                context.drawImage(getContext().canvas, 0, 0);
-
-            },
-            clear = function () {
-                var ctx = getContext();
-                ctx.save();
-                ctx.clearRect(0, 0, width, height);
-                ctx.restore();
-            };
+            drawing = false,
+            _self = this;
 
         screenAspectRatio = screen.availWidth / screen.availHeight;
         // fix game dimensions
@@ -49,36 +36,38 @@ mamd.define("wrcb.core.Viewport",
         canvas.setAttribute("height", height);
         bufferContext = canvas.getContext("2d");
 
-        this.draw = function () {
+        this.draw = function (timestamp, modifier) {
             var scene = null,
                 camera = null,
-                zoom = 1,
-                c = getContext();
+                zoom = 1;
 
-            // clear the back buffer
-            clear();
+            if (drawing) {
+                return false;
+            }
 
+            drawing = true;
             if (!!(scene = _self.getScene())
                 && !!(camera = scene.getCamera())) {
                 cameraPosition = camera.getPosition();
                 zoom = camera.getZoom();
                 // draw
-                c.save();
-                c.translate(Math.round(width/2) - cameraPosition[0], Math.round(height/2) - cameraPosition[1]);
-                c.scale(zoom, zoom);
-                !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(c);
-                c.restore();
+                bufferContext.save();
+                bufferContext.translate(Math.round(width/2) - cameraPosition[0], Math.round(height/2) - cameraPosition[1]);
+                bufferContext.scale(zoom, zoom);
+                !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(bufferContext, timestamp, modifier);
+                bufferContext.restore();
             } else {
                 // draw
-                !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(c);
+                !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(bufferContext, timestamp, modifier);
             }
 
-            // flip buffers
-            swapBuffers();
+            context.drawImage(bufferContext.canvas, 0, 0);
+
+            drawing = false;
         };
 
         this.addScene = function (sceneId, scene) {
-            console.log("Viewport scene registration", sceneId);
+            DEBUG && console.log("Viewport scene registration", sceneId);
 
             if (!sceneId || !scene) {
                 throw "Scene not defined";
@@ -92,7 +81,7 @@ mamd.define("wrcb.core.Viewport",
         };
 
         this.removeScene = function (sceneId) {
-            console.log('Viewport scene unregistration', sceneId);
+            DEBUG && console.log('Viewport scene unregistration', sceneId);
 
             if (!sceneId) {
                 throw  'Scene not defined';
@@ -102,7 +91,7 @@ mamd.define("wrcb.core.Viewport",
         };
 
         this.setScene = function (sceneId) {
-            console.log('Select scene', sceneId);
+            DEBUG && console.log('Select scene', sceneId);
 
             if (!scenes[sceneId]) {
                 throw  'Scene does not exist!';

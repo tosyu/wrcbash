@@ -5,14 +5,15 @@ mamd.define(
         "wrcb.core.utils"
     ],
     function (Force, utils) {
-
         var UserInput = function () {
             var keys = [],
+                timestamp = 0,
+                modifier = 1;
                 move = function (actor, negative) {
                     var p = actor.getPosition(),
                         r = actor.getRotation(),
                         radians = r * Math.PI / 180,
-                        v = actor.getVelocity(),
+                        v = actor.getVelocity() * modifier,
                         m = [
                             Math.cos(radians) * v,
                             Math.sin(radians) * v
@@ -31,16 +32,16 @@ mamd.define(
                         }
                         actor.setVelocity(v);
                     }
-                    actor.setPosition(p[0] + m[0], p[1] + m[1]);
+                    actor.setPosition((p[0] + m[0]) * modifier, (p[1] + m[1]) * modifier);
                 },
                 turn = function (actor, negative) {
                     var r = actor.getRotation(),
                         v = actor.getVelocity();
                     if (Math.abs(v) > 0) {
                         if (negative) {
-                            actor.setRotation(r-2.5);
+                            actor.setRotation((r-2.5) * modifier);
                         } else {
-                            actor.setRotation(r+2.5);
+                            actor.setRotation((r+2.5) * modifier);
                         }
                     }
                 };
@@ -65,7 +66,7 @@ mamd.define(
                 evt.stopPropagation();
             });
 
-            this.tick = function () {
+            this.tick = function (t, m) {
                 var key = keys.length,
                     actors = this.getBound(),
                     actor = 0;
