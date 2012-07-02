@@ -2,11 +2,13 @@ mamd.define("wrcb.scenes.Demo",
     [
         "wrcb.core.Scene",
         "wrcb.actors.Car",
-        "wrcb.actors.WhiteBox"
+        "wrcb.actors.WhiteBox",
+        "wrcb.cameras.ElasticCamera"
     ],
-    function (Scene, Car, WhiteBox) {
+    function (Scene, Car, WhiteBox, ElasticCamera) {
 
     var Demo = function () {
+        var cam = new ElasticCamera();
         var car = new Car();
         var box = new WhiteBox();
 
@@ -20,6 +22,8 @@ mamd.define("wrcb.scenes.Demo",
             "box",
             box
         );
+        cam.watch(car);
+        this.setCamera(cam);
     };
     Demo.prototype = new Scene();
 

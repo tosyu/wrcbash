@@ -7,7 +7,7 @@ mamd.define("wrcb.core.Scene",
         var layers = [0,1,2,3,4],
             actorLayers = {},
             actors = [],
-            cs = new CollisionSystem();
+            collisions = new CollisionSystem();
 
         this.registerActor = function (layer, id, actor, CollisionSystem) {
 
@@ -36,7 +36,7 @@ mamd.define("wrcb.core.Scene",
             }
             actorLayers[layer][id] = utils.indexOf(actors, actor);
             if (actor.isCollidable()) {
-                cs.registerActor(actor, layer);
+                collisions.registerActor(actor);
             }
         };
 
@@ -58,7 +58,7 @@ mamd.define("wrcb.core.Scene",
             }
 
             if (actor.isCollidable()) {
-                cs.unregisterActor(actor, layer);
+                collisions.unregisterActor(actor);
             }
             delete actorLayers[layer][id]._sceneLayer;
             actors.splice(actorLayers[layer][id], 1)
@@ -114,6 +114,14 @@ mamd.define("wrcb.core.Scene",
             return actorLayers[layer][id];
         };
 
+        this.setCamera = function (c) {
+            camera = c;
+        };
+
+        this.getCamera = function () {
+            return camera;
+        };
+
         this.getActors = function () {
             return actors;
         };
@@ -129,7 +137,8 @@ mamd.define("wrcb.core.Scene",
         };
 
         this.tick = function (timestamp) {
-            cs.tick();
+            collisions.tick();
+            camera._tick();
         };
     };
 

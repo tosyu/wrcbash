@@ -4,27 +4,24 @@ mamd.define("wrcb.core.Viewport",
     ],
     function (utils) {
     return function (params) {
-        var width = params.width || 320,
-            height = params.height || 240,
+        var width = !!params && params.width || 320,
+            height = !!params && params.height || 240,
             gameAspectRatio = width / height,
             screenAspectRatio = 0,
             canvasWidthStretch = 100,
-            doubleBuffering = "doubleBuffering" in params
-                ? params.doubleBuffering
-                : true,
             currentScene = null,
             scenes = {},
             canvas = document.createElement("canvas");
             context = canvas.getContext("2d"),
             bufferContext = null,
+            _self = this,
             getContext = function () {
-                return doubleBuffering ? bufferContext : context;
+                return bufferContext;
             },
             swapBuffers = function () {
-                if (doubleBuffering) {
-                    context.clearRect(0, 0, width, height);
-                    context.drawImage(getContext().canvas, 0, 0);
-                }
+                context.clearRect(0, 0, width, height)
+                context.drawImage(getContext().canvas, 0, 0);
+
             },
             clear = function () {
                 var ctx = getContext();
@@ -47,19 +44,34 @@ mamd.define("wrcb.core.Viewport",
         document.body.setAttribute("scrolling", "no");
         document.body.appendChild(canvas);
 
-        if (doubleBuffering) {
-            canvas = document.createElement("canvas");
-            canvas.setAttribute("width", width);
-            canvas.setAttribute("height", height);
-            bufferContext = canvas.getContext("2d");
-        }
+        canvas = document.createElement("canvas");
+        canvas.setAttribute("width", width);
+        canvas.setAttribute("height", height);
+        bufferContext = canvas.getContext("2d");
 
         this.draw = function () {
+            var scene = null,
+                camera = null,
+                zoom = 1,
+                c = getContext();
+
             // clear the back buffer
             clear();
 
-            // draw
-            !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(getContext())
+            if (!!(scene = _self.getScene())
+                && !!(camera = scene.getCamera())) {
+                cameraPosition = camera.getPosition();
+                zoom = camera.getZoom();
+                // draw
+                c.save();
+                c.translate(Math.round(width/2) - cameraPosition[0], Math.round(height/2) - cameraPosition[1]);
+                c.scale(zoom, zoom);
+                !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(c);
+                c.restore();
+            } else {
+                // draw
+                !!currentScene && !!scenes[currentScene] && scenes[currentScene].draw(c);
+            }
 
             // flip buffers
             swapBuffers();

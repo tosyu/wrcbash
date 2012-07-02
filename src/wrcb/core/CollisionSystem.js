@@ -1,7 +1,7 @@
 mamd.define("wrcb.core.CollisionSystem", function () {
     return function () {
-        var collidersLayers = [],
-            actorsLayers = [],
+        var colliders = [],
+            actors = [],
             boxOverlapsWith = function (box1, box2) {
                 var i = 0,
                     imax = box1.length;
@@ -82,7 +82,7 @@ mamd.define("wrcb.core.CollisionSystem", function () {
                     colliderBoundingBox,
                     edgeCornerBBoxes;
 
-                var layer = collidersLayers.length,
+                var layer = colliders.length,
                     collider = null,
                     actor = null,
                     colliderEdges = null,
@@ -94,132 +94,55 @@ mamd.define("wrcb.core.CollisionSystem", function () {
                     colliderEdge = null,
                     colliderCorner = null;
 
-                while (--layer >= 0) {
-                    collider = !!collidersLayers[layer] && collidersLayers[layer].length;
-                    if (!collider || collider === 0) {
-                        continue;
-                    }
-                    while (--collider >= 0) {
-                        actor = !!actorsLayers[layer] && actorsLayers[layer].length;
-                        if (!actor || actor === 0) {
-                            continue;
-                        }
-                        colliderEdges = rotateEdges(collidersLayers[layer][collider].getEdges(), collidersLayers[layer][collider].getRotation());
-                        colliderBoundingBox = collidersLayers[layer][collider].getBoundingBox();
-                        while (--actor >= 0) {
-                            actorBoundingBox = actorsLayers[layer][actor].getBoundingBox();
-                            if (actorsLayers[layer][actor] !== collidersLayers[layer][collider]
-                                && (colliderCorner = boxOverlapsWith(colliderBoundingBox, actorBoundingBox)) !== false) {
-                                // collision?
-                                colliderEdge = colliderEdges.length;
-                                while (--colliderEdge >= 0) {
-                                    colliderEdgeBoundingBox = getBoundingBoxFromEdge(colliderEdges[colliderEdge]);
-                                    if ((colliderEdgeCorner = boxOverlapsWith(colliderEdgeBoundingBox, actorBoundingBox)) !== false) {
-                                        colliderEdgeCornerBoundingBoxes = getBoundingBoxFromEdgeCorners(colliderEdges[colliderEdge]);
-                                        if (boxOverlapsWith(colliderEdgeCornerBoundingBoxes[0], actorBoundingBox) !== false
-                                            && boxOverlapsWith(colliderEdgeCornerBoundingBoxes[1], actorBoundingBox) !== false) {
-                                            collidersLayers[layer][collider].edgeCollisionWith(colliderEdge, actorsLayers[layer][actor]);
-                                            actorsLayers[layer][actor].pointCollisionWith(colliderEdgeCorner, collidersLayers[layer][collider]);
-                                        }
+                collider = colliders.length;
+                while (--collider >= 0) {
+                    actor = actors.length;
+                    colliderEdges = rotateEdges(colliders[collider].getEdges(), colliders[collider].getRotation());
+                    colliderBoundingBox = colliders[collider].getBoundingBox();
+                    while (--actor >= 0) {
+                        actorBoundingBox = actors[actor].getBoundingBox();
+                        if (actors[actor] !== colliders[collider]
+                            && (colliderCorner = boxOverlapsWith(colliderBoundingBox, actorBoundingBox)) !== false) {
+                            // collision?
+                            colliderEdge = colliderEdges.length;
+                            while (--colliderEdge >= 0) {
+                                colliderEdgeBoundingBox = getBoundingBoxFromEdge(colliderEdges[colliderEdge]);
+                                if ((colliderEdgeCorner = boxOverlapsWith(colliderEdgeBoundingBox, actorBoundingBox)) !== false) {
+                                    colliderEdgeCornerBoundingBoxes = getBoundingBoxFromEdgeCorners(colliderEdges[colliderEdge]);
+                                    if (boxOverlapsWith(colliderEdgeCornerBoundingBoxes[0], actorBoundingBox) !== false
+                                        && boxOverlapsWith(colliderEdgeCornerBoundingBoxes[1], actorBoundingBox) !== false) {
+                                        colliders[collider].edgeCollisionWith(colliderEdge, actors[actor]);
+                                        actors[actor].pointCollisionWith(colliderEdgeCorner, colliders[collider]);
                                     }
                                 }
-                                collidersLayers[layer][collider].cornerCollisionWith(colliderCorner, actorsLayers[layer][actor]);
-                                actorsLayers[layer][actor].pointCollisionWith(colliderBoundingBox[colliderCorner], collidersLayers[layer][collider]);
                             }
+                            colliders[collider].cornerCollisionWith(colliderCorner, actors[actor]);
+                            actors[actor].pointCollisionWith(colliderBoundingBox[colliderCorner], colliders[collider]);
                         }
                     }
                 }
-
-
-                /*for (i in this.colliders) {
-                    if (this.colliders.hasOwnProperty(i)) {
-                        colliderEdges = this.edgesRotate(this.colliders[i].getEdges(), this.colliders[i].getRotation());
-                        colliderBoundingBox = this.colliders[i].getBoundingBox();
-                        for (x in this.actors) {
-                            if (this.actors.hasOwnProperty(x) && this.actors[x].getId() !== this.colliders[i].getId()) {
-                                if ((corner = this.boxOverlapsWith(colliderBoundingBox, this.actors[x].getBoundingBox())) !== false) {
-                                    for (a in colliderEdges) {
-                                        edgeBoundingBox = this.getBoundingBoxFromEdge(colliderEdges[a]);
-                                        if ((edgeCorner = this.boxOverlapsWith(edgeBoundingBox, this.actors[x].getBoundingBox())) !== false) {
-                                            edgeCornerBBoxes = this.getBoundingBoxFromEdgeCorners(colliderEdges[a]);
-                                            if (this.boxOverlapsWith(edgeCornerBBoxes["box1"], this.actors[x].getBoundingBox()) !== false
-                                             && this.boxOverlapsWith(edgeCornerBBoxes["box2"], this.actors[x].getBoundingBox()) !== false) {
-                                                this.colliders[i].edgeCollisioboxOverlapsWith() nWith(parseInt(a), this.actors[x]);
-                                                this.actors[x].pointCollisionWith(edgeBoundingBox[corner], this.colliders[i]);
-                                            }
-                                        }
-                                    }
-                                    this.colliders[i].cornerCollisionWith(corner, this.actors[x]);
-                                    this.actors[x].pointCollisionWith(colliderBoundingBox[corner], this.colliders[i]);
-                                    edgeBoundingBox = null;
-                                }
-                                actorEdges = null;
-                            }
-                        }
-
-                        if (this.colliders[i].isCollidingWithScreen() === true) {
-                            if (colliderBoundingBox[0]["x"] <= 0) {
-                                this.colliders[i].edgeCollisionWith(3); //wall left side bump
-                            } else if (colliderBoundingBox[1]["x"] >= this.scene.viewport.width) {
-                                this.colliders[i].edgeCollisionWith(1); //wall right side bump
-                            }
-
-                            if (colliderBoundingBox[0]["y"] <= 0) {
-                                this.colliders[i].edgeCollisionWith(0); //wall top side bump
-                            } else if (colliderBoundingBox[2]["y"] >= this.scene.viewport.height) {
-                                this.colliders[i].edgeCollisionWith(2); //wall bottom side bump
-                            }
-                        }
-                        colliderEdges = null;
-                        colliderBoundingBox = null;
-                    }
-                }*/
             };
 
-        this.registerActor = function (actor, layer) {
-            var _layer = layer || 0;
+        this.registerActor = function (actor) {
             if (actor.isCollider()) {
-                if (!collidersLayers[layer]) {
-                    collidersLayers[layer] = [];
-                }
-                collidersLayers[layer].push(actor);
+                colliders.push(actor);
             }
-
-            if (!actorsLayers[layer]) {
-                actorsLayers[layer] = [];
-            }
-
-            actorsLayers[layer].push(actor);
+            actors.push(actor);
 
             console.log(actor.getId(), "registered in collision system");
         };
 
-        this.unregisterActor = function (actor, layer) {
-            var _layer = layer || 0,
-                index = -1;
+        this.unregisterActor = function (actor) {
+            var index = -1;
 
             if (actor.isCollider()) {
-                if (!collidersLayers[layer]) {
-                    throw "Layer in collisions does not exist!";
-                }
-
-                if ((index = utils.indexOf(collidersLayers, actor)) !== -1) {
-                    collidersLayers[layer].splice(index, 1);
-                    if (collidersLayers[layer].length === 0) {
-                        delete collidersLayers[layer];
-                    }
+                if ((index = utils.indexOf(colliders, actor)) !== -1) {
+                    colliders.splice(index, 1);
                 }
             }
 
-            if (!actorsLayers[layer]) {
-                throw "Layer in collisions does not exist!";
-            }
-
-            if ((index = utils.indexOf(actorsLayers, actor)) !== -1) {
-                actorsLayers[layer].splice(index, 1);
-                if (actorsLayers[layer].length === 0) {
-                    delete actorsLayers[layer];
-                }
+            if ((index = utils.indexOf(actors, actor)) !== -1) {
+                actors.splice(index, 1);
                 console.log(actor.getId(), "unregistered in collision system");
             }
         };
