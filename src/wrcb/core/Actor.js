@@ -100,8 +100,8 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
         };
 
         this.setPosition = function (_x, _y) {
-            x = _x;
-            y = _y;
+            x = !!NO_FLOAT ? (0.5 + _x) | 0 : _x;
+            y = !!NO_FLOAT ? (0.5 + _y) | 0 : _y;
         };
 
         this.getPosition = function () {
@@ -118,7 +118,7 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
         };
 
         this.setRotation = function (r) {
-            rotation = r;
+            rotation = !!NO_FLOAT ? (0.5 + r) | 0 : r;
         };
 
         this.getRotation = function () {

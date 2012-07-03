@@ -1,7 +1,12 @@
 {
     "name": "Rocky Mouintain",
-    "background": "assets/tracks/RockyMouintain/background.png",
     "actors": [
+        {
+            "object": "wrcb.actors.Background",
+            "asset": "assets/tracks/RockyMouintain/background.png",
+            "x": 0,
+            "y": 0
+        }
         {
             "object": "wrcb.actors.Car"
             "x": 0,
@@ -14,6 +19,18 @@
         },
         {
             "object": "wrcb.forcefields.Water"
+            "x": 0,
+            "y": 0,
+            "rotation": 15
+        },
+        {
+            "object": "wrcb.forcefields.Sand"
+            "x": 0,
+            "y": 0,
+            "rotation": -15
+        },
+        {
+            "object": "wrcb.forcefields.Mudd"
             "x": 0,
             "y": 0,
             "rotation": 15

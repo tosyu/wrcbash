@@ -10,8 +10,8 @@ mamd.define("wrcb.core.Camera", function () {
         };
 
         this.setPosition = function (_x, _y) {
-            x = _x;
-            y = _y;
+            x = !!NO_FLOAT ? (0.5 + _x) | 0 : _x;
+            y = !!NO_FLOAT ? (0.5 + _y) | 0 : _y;
         };
 
         this.getZoom = function () {
@@ -19,7 +19,7 @@ mamd.define("wrcb.core.Camera", function () {
         };
 
         this.setZoom = function (z) {
-            zoom = z;
+            zoom = !!NO_FLOAT ? (0.5 + z) | 0 : z;
         };
 
         this._tick = function (timestamp, modifier) {

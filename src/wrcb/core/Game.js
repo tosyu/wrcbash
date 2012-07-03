@@ -13,10 +13,13 @@ mamd.define("wrcb.core.Game",
         ticking = false,
         frames = 0,
         requestFrame = utils.getRequestFrameFunction(),
+        frameStats = null,
+        tickStats = null,
         draw = function (current) {
             if (drawing) {
                 return false;
             }
+            !!DEBUG && !!frameStats && frameStats.begin();
             drawing = true;
             var modifier = (current - lastFrame) / goldFrameTime;
             !!viewport && !!viewport.draw && viewport.draw(current, modifier);
@@ -24,11 +27,13 @@ mamd.define("wrcb.core.Game",
             frames++;
             requestFrame(draw);
             drawing = false;
+            !!DEBUG && !!frameStats && frameStats.end();
         },
         tick = function (current) {
             if (ticking) {
                 return false;
             }
+            !!DEBUG && !!tickStats && tickStats.begin();
             ticking = true;
             var modifier = (current - lastTick) / goldFrameTime;
             if (!!viewport
@@ -47,6 +52,7 @@ mamd.define("wrcb.core.Game",
             lastTick = current;
             requestFrame(tick);
             ticking = false;
+            !!DEBUG && !!tickStats && tickStats.end();
         },
         start = function () {
             if (!started) {
@@ -72,6 +78,27 @@ mamd.define("wrcb.core.Game",
                     "width": 640,
                     "height": 480
                 });
+                if (DEBUG) {
+                    frameStats = new window.Stats();
+                    frameStats.setMode(0); // 0: fps, 1: ms
+
+                    // Align top-left
+                    frameStats.domElement.style.position = 'absolute';
+                    frameStats.domElement.style.left = '0px';
+                    frameStats.domElement.style.top = '0px';
+
+                    document.body.appendChild(frameStats.domElement);
+
+                    tickStats = new window.Stats();
+                    tickStats.setMode(0); // 0: fps, 1: ms
+
+                    // Align top-left
+                    tickStats.domElement.style.position = 'absolute';
+                    tickStats.domElement.style.right = '0px';
+                    tickStats.domElement.style.top = '0px';
+
+                    document.body.appendChild(tickStats.domElement);
+                }
                 start();
 
                 assets.load(function () {

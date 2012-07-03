@@ -19,10 +19,8 @@ mamd.define(
                     var p = actor.getPosition(),
                         cp = this.getPosition(),
                         d = actor.getDimensions(),
-                        factor = responseFactor * modifier,
-                        x = cp[0] * (1 - factor) + (p[0] + d[0] / 2) * factor,
-                        y = cp[1] * (1 - factor) + (p[1] + d[1] / 2) * factor;
-                    this.setPosition((0.5 + x) | 0, (0.5 + y) | 0);
+                        factor = responseFactor * modifier;
+                    this.setPosition(cp[0] * (1 - factor) + (p[0] + d[0] / 2) * factor, cp[1] * (1 - factor) + (p[1] + d[1] / 2) * factor);
                 }
             };
         };

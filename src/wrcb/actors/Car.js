@@ -19,7 +19,7 @@ mamd.define(
                 var p = this.getPosition(),
                     d = this.getDimensions(),
                     r = this.getRotation(),
-                    center = [Math.round(d[0] / 2), Math.round(d[1] / 2)];
+                    center = [d[0] / 2, d[1] / 2];
 
                 context.translate(p[0] + center[0], p[1] + center[1]);
                 context.rotate((r+90) * Math.PI / 180);
