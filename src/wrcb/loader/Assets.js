@@ -60,27 +60,8 @@ mamd.define("wrcb.loader.Assets", ["wrcb.core.utils", "wrcb.core.Request"], func
         };
 
     return {
-        "load": function (callback) {
-            onLoad = callback || false;
-            mamd.require(["assets.assets"], function (data) {
-                DEBUG && console.log("loaded descriptor", data);
-                var i = data.images && data.images.length || 0;
-                while (--i >= 0) {
-                    add(data.images[i], "image");
-                }
-                var i = data.audio && data.audio.length || 0;
-                while (--i >= 0) {
-                    add(data.audio[i], "audio");
-                }
-                loadData();
-            });
-            // BROWSERS DONT ALLOW AJAX LOCAL
-            // @FIXME
-            /*onLoad = callback || false;
-            var rs = request.create({
-                "url": "assets/assets.json"
-            });
-            rs.on("success", function (data) {
+        "load": function (_assets, callback) {
+            var process = function (data) {
                 console.log("loaded descriptor", data);
                 var i = data.images && data.images.length || 0;
                 while (--i >= 0) {
@@ -91,11 +72,22 @@ mamd.define("wrcb.loader.Assets", ["wrcb.core.utils", "wrcb.core.Request"], func
                     add(data.audio[i], "audio");
                 }
                 loadData();
-
-            }).on("error", function () {
-                console.error("could not load assets data")
-            });
-            rs.send();*/
+            };
+            failed = 0;
+            loaded = 0;
+            assets = [];
+            onLoad = callback || false;
+            if (typeof _assets === "object") {
+                process(_assets);
+            } else if (typeof _assets === "string") {
+                var rs = request.create({
+                    "url": _assets
+                });
+                rs.on("success", process).on("error", function () {
+                    console.error("could not load assets data")
+                });
+                rs.send();
+            }
         },
 
         "get": function (path) {

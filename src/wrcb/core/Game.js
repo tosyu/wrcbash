@@ -39,12 +39,10 @@ mamd.define("wrcb.core.Game",
             if (!!viewport
                 && !!(scene = viewport.getScene())) {
                 scene.tick(current, modifier);
-                //window.setTimeout(utils.bind(scene.tick, scene), 10);
                 if (!!(actors = scene.getActors())) {
                     actor = actors.length;
                     while (--actor >= 0) {
                         actors[actor]._tick(current, modifier);
-                        //window.setTimeout(utils.bind(actors[actor]._tick, actors[actor]), 10);
                     }
                 }
             }
@@ -69,11 +67,11 @@ mamd.define("wrcb.core.Game",
             mamd.require([
                 "wrcb.loader.Assets",
                 "wrcb.core.Viewport",
-                "wrcb.scenes.Demo"
+                "wrcb.scenes.Main"
                 ], function (
                     assets,
                     Viewport,
-                    Demo) {
+                    Main) {
                 viewport = new Viewport({
                     "width": 640,
                     "height": 480
@@ -100,16 +98,9 @@ mamd.define("wrcb.core.Game",
                     document.body.appendChild(tickStats.domElement);
                 }
                 start();
-
-                assets.load(function () {
-                    DEBUG && console.log("loaded all asssets");
-
-                    var demo = new Demo();
-                    viewport.addScene("demoscene", demo);
-
-                }, function () {
-                    DEBUG && console.log("failed to load assets");
-                });
+                viewport.addScene("main", new Main({
+                    "viewport": viewport
+                }));
             })
         }
     };

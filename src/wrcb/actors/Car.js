@@ -9,7 +9,9 @@ mamd.define(
     ],
     function (utils, assets, Actor, UserInput, Inertia) {
 
-        var Car = function () {
+        var Car = function (params) {
+            this.constructor(params);
+
             var carSprite = assets.get("assets/images/car_white_red_stripes.png");
 
             this.addForce(new UserInput);
@@ -40,16 +42,7 @@ mamd.define(
             };
         };
 
-        Car.prototype = new Actor({
-            "x": 25, // start at center
-            "y": 80, // start at center
-            "width": 64,
-            "height": 64,
-            "drawable": true,
-            "collidable": true,
-            "collider": true,
-            "id": "playerCar"
-        });
+        Car.prototype = new Actor();
 
         return Car;
     }

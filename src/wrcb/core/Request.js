@@ -59,7 +59,12 @@ mamd.define("wrcb.core.Request", function () {
         };
 
         this.getResponse = getResponse = function () {
-            return JSON.parse(req.responseText);
+            try {
+                return JSON.parse(req.responseText);
+            } catch (err) {
+                !!DEBUG && console.error(err, "in", params.url);
+            }
+            return null;
         };
 
         this.getStatus = function () {
@@ -71,6 +76,9 @@ mamd.define("wrcb.core.Request", function () {
         this.send = function(body) {
             req.onreadystatechange = function (evt) {
                 switch(req.readyState) {
+                case 3:
+                    console.log(req);
+                    break;
                 case 4:
                     fire("load", getResponse());
                     if (req.status === 200 || req.status === 201 || req.status === 0) {

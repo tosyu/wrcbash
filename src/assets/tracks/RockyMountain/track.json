@@ -1,0 +1,37 @@
+{
+    "id": "rocky_mountain_01",
+    "camera": "wrcb.cameras.ElasticCamera",
+    "assets": {
+        "images": [
+            "assets/images/car_white_red_stripes.png",
+            "assets/images/sample-map.png"
+        ]
+    },
+    "actors": [
+        {
+            "instance": "wrcb.actors.Background",
+            "layer": "LAYER_BACKGROUND",
+            "params": {
+                "y": 0,
+                "x": 0,
+                "drawable": true,
+                "asset": "assets/images/sample-map.png"
+            }
+        },
+        {
+            "instance": "wrcb.actors.Car",
+            "layer": "LAYER_MIDGROUND",
+            "watched": true,
+            "params": {
+                "x": 0,
+                "y": 0,
+                "width": 64,
+                "height": 64,
+                "drawable": true,
+                "collidable": true,
+                "collider": true,
+                "rotation": 0
+            }
+        }
+    ]
+}

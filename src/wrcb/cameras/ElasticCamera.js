@@ -11,6 +11,7 @@ mamd.define(
             this.constructor(params);
 
             this.watch = function (a) {
+                !!DEBUG && console.log(this, "is watching", a);
                 actor = a;
             };
 

@@ -3,14 +3,15 @@ mamd.define("wrcb.core.Scene",
         "wrcb.core.utils",
         "wrcb.core.CollisionSystem"
     ], function (utils, CollisionSystem) {
-    var Scene = function () {
+    var Scene = function (params) {
         var layers = [0,1,2,3,4],
             actorsByLayer = {},
             actors = [],
+            camera = null,
             collisions = new CollisionSystem(),
-            viewport = null;
+            viewport = !!params && params.viewport || null;
 
-        this.registerActor = function (layer, id, actor, CollisionSystem) {
+        this.registerActor = function (layer, id, actor) {
 
             switch (true) {
             case !layer:
@@ -153,8 +154,8 @@ mamd.define("wrcb.core.Scene",
         };
 
         this.tick = function (timestamp, modifier) {
-            collisions.tick(timestamp, modifier);
-            camera._tick(timestamp, modifier);
+            !!collisions && collisions.tick(timestamp, modifier);
+            !!camera && camera._tick(timestamp, modifier);
         };
     };
 

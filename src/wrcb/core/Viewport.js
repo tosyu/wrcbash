@@ -107,8 +107,7 @@ mamd.define("wrcb.core.Viewport",
         };
 
         this.setScene = function (sceneId) {
-            DEBUG && console.log('Select scene', sceneId);
-
+            DEBUG && console.log('Selected scene', sceneId);
             if (!scenes[sceneId]) {
                 throw  'Scene does not exist!';
             }

@@ -1,25 +1,25 @@
 mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
     return function (params) {
-        var id = params.id || null,
-            x = params.x || 0,
-            y = params.y || 0,
-            velocity = params.velocity || 0,
-            width = params.width || 0,
-            height = params.height || 0,
-            rotation = params.rotation || 0,
+        var id = !!params && params.id || null,
+            x = !!params && params.x || 0,
+            y = !!params && params.y || 0,
+            velocity = !!params && params.velocity || 0,
+            width = !!params && params.width || 0,
+            height = !!params && params.height || 0,
+            rotation = !!params && params.rotation || 0,
             forces = [],
             layer = null,
             scene = null,
-            collidable = "collidable" in params
+            collidable = !!params && "collidable" in params
                 ? params.collidable
                 : false,
-            collider = "collider" in params
+            collider = !!params && "collider" in params
                 ? params.collider
                 : false,
-            collidesWithScreen = "collidesWithScreen" in params
+            collidesWithScreen = !!params && "collidesWithScreen" in params
                 ? params.collidesWithScreen
                 : false,
-            drawable = "drawable" in params
+            drawable = !!params && "drawable" in params
                 ? params.drawable
                 : false,
             debugColor = utils.getColor(
@@ -27,8 +27,7 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
                     Math.floor((Math.random()*255)+1),
                     Math.floor((Math.random()*255)+1));
 
-        this.seteId = function (_id) {
-            //!!(typeof _id !== "string") && throw "Actor id must be string";
+        this.setId = function (_id) {
             id = _id;
         };
 
