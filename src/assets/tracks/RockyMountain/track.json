@@ -23,14 +23,14 @@
             "layer": "LAYER_MIDGROUND",
             "watched": true,
             "params": {
-                "x": 0,
-                "y": 0,
+                "x": 363,
+                "y": 220,
                 "width": 64,
                 "height": 64,
                 "drawable": true,
                 "collidable": true,
                 "collider": true,
-                "rotation": 0
+                "rotation": 20
             }
         }
     ]
