@@ -13,6 +13,9 @@ mamd.define("wrcb.core.Viewport",
             scenes = {},
             canvas = document.createElement("canvas");
             context = canvas.getContext("2d"),
+            canvasInterpolation = !!params && "canvasInterpolation" in params
+                ? params.canvasInterpolation
+                : true,
             bufferContext = null
             _self = this;
 
@@ -26,14 +29,19 @@ mamd.define("wrcb.core.Viewport",
         canvas.setAttribute("height", height);
         canvas.setAttribute("style", ["width:", Math.round(canvasWidthStretch), "%;height:100%;min-height:100%;background:#000000;margin:0px auto;"].join(''));
 
-        document.body.setAttribute("style", "width:100%;height:100%;min-height:100%;overflow:hidden;padding:0px;margin:0px;"); //@FIXME
-        document.body.setAttribute("scrolling", "no");
         document.body.appendChild(canvas);
 
         canvas = document.createElement("canvas");
         canvas.setAttribute("width", width);
         canvas.setAttribute("height", height);
         bufferContext = canvas.getContext("2d");
+
+        if (!canvasInterpolation && "mozImageSmoothingEnabled" in context) {
+            context.mozImageSmoothingEnabled = false;
+        }
+        if (!canvasInterpolation && "mozImageSmoothingEnabled" in bufferContext) {
+            bufferContext.mozImageSmoothingEnabled = false;
+        }
 
         this.draw = function (timestamp, modifier) {
             var scene = null,
