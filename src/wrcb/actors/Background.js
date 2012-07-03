@@ -16,8 +16,8 @@ mamd.define("wrcb.actors.Background", [
         Background.prototype = new Actor({
             "x": 0,
             "y": 0,
-            "width": 1024,
-            "height": 1024,
+            "width": 2560,
+            "height": 1600,
             "drawable": true
         });
 

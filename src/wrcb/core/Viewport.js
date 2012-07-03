@@ -36,11 +36,20 @@ mamd.define("wrcb.core.Viewport",
         canvas.setAttribute("height", height);
         bufferContext = canvas.getContext("2d");
 
-        if (!canvasInterpolation && "mozImageSmoothingEnabled" in context) {
-            context.mozImageSmoothingEnabled = false;
-        }
-        if (!canvasInterpolation && "mozImageSmoothingEnabled" in bufferContext) {
-            bufferContext.mozImageSmoothingEnabled = false;
+        if (!canvasInterpolation) {
+
+            if ("mozImageSmoothingEnabled" in context) {
+                context.mozImageSmoothingEnabled = false;
+            }
+            if ("webkitImageSmoothingEnabled" in context) {
+                context.mozImageSmoothingEnabled = false;
+            }
+            if ("webkitImageSmoothingEnabled" in bufferContext) {
+                bufferContext.webkitImageSmoothingEnabled = false;
+            }
+            if ("webkitImageSmoothingEnabled" in context) {
+                bufferContext.webkitImageSmoothingEnabled = false;
+            }
         }
 
         this.draw = function (timestamp, modifier) {
