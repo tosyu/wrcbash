@@ -1,0 +1,22 @@
+{
+    "name": "Rocky Mouintain",
+    "background": "assets/tracks/RockyMouintain/background.png",
+    "actors": [
+        {
+            "object": "wrcb.actors.Car"
+            "x": 0,
+            "y": 0,
+            "rotation": 0,
+            "forces": {
+                "UserInput",
+                "Inertia"
+            }
+        },
+        {
+            "object": "wrcb.forcefields.Water"
+            "x": 0,
+            "y": 0,
+            "rotation": 15
+        }
+    ]
+}

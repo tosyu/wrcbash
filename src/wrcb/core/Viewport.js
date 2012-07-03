@@ -52,6 +52,10 @@ mamd.define("wrcb.core.Viewport",
             }
         }
 
+        this.getDimensions = function () {
+            return [width, height];
+        };
+
         this.draw = function (timestamp, modifier) {
             var scene = null,
                 camera = null,
@@ -83,6 +87,7 @@ mamd.define("wrcb.core.Viewport",
                 throw "Scene not defined";
             }
 
+            scene.setViewport(this);
             scenes[sceneId] = scene;
 
             if (!currentScene) {
@@ -97,6 +102,7 @@ mamd.define("wrcb.core.Viewport",
                 throw  'Scene not defined';
             }
 
+            scenes[sceneId].forgetViewport();
             delete scenes[sceneId];
         };
 

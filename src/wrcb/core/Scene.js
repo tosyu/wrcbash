@@ -7,7 +7,8 @@ mamd.define("wrcb.core.Scene",
         var layers = [0,1,2,3,4],
             actorsByLayer = {},
             actors = [],
-            collisions = new CollisionSystem();
+            collisions = new CollisionSystem(),
+            viewport = null;
 
         this.registerActor = function (layer, id, actor, CollisionSystem) {
 
@@ -30,6 +31,7 @@ mamd.define("wrcb.core.Scene",
             }
 
             actor._setLayer(layer);
+            actor.setScene(this);
             actors.push(actor);
             if (!actorsByLayer[layer]) {
                 actorsByLayer[layer] = {};
@@ -61,9 +63,22 @@ mamd.define("wrcb.core.Scene",
             if (actor.isCollidable()) {
                 collisions.unregisterActor(actor);
             }
-            actor._forgetLayer();;
+            actor._forgetLayer();
+            actor.forgetScene();
             actors.splice(actorsByLayer[layer][id], 1)
             delete actorsByLayer[layer][id];
+        };
+
+        this.setViewport = function (v) {
+            viewport = v;
+        };
+
+        this.getViewport = function () {
+            return viewport;
+        };
+
+        this.forgetViewport = function () {
+            viewport = null;
         };
 
         this.getActorsByLayer = function (reversed) {

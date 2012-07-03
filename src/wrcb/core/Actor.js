@@ -9,6 +9,7 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
             rotation = params.rotation || 0,
             forces = [],
             layer = null,
+            scene = null,
             collidable = "collidable" in params
                 ? params.collidable
                 : false,
@@ -76,6 +77,18 @@ mamd.define("wrcb.core.Actor", ["wrcb.core.utils"], function (utils) {
 
         this._forgetLayer = function () {
             layer = null;
+        };
+
+        this.setScene = function (s) {
+            scene = s;
+        };
+
+        this.getScene = function () {
+            return scene;
+        };
+
+        this.forgetScene = function () {
+            scene = null;
         };
 
         this.setVelocity = function (v) {

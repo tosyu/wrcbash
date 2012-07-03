@@ -5,11 +5,12 @@ mamd.define("wrcb.actors.Background", [
     ],
     function (utils, assets, Actor) {
         var Background = function () {
-            var carSprite = assets.get("assets/images/sample-map.png");
-
+            var carSprite = assets.get("assets/images/sample-map.png"),
+                camera = null,
+                scene = null,
+                viewport = null;
             this.draw = function (context) {
                 var d = this.getDimensions();
-                context.translate(0, 0);
                 context.drawImage(carSprite, 0, 0, d[0], d[1]);
             };
         };
