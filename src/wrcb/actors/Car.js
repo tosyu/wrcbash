@@ -4,15 +4,17 @@ mamd.define(
         "wrcb.core.utils",
         "wrcb.loader.Assets",
         "wrcb.core.Actor",
+        "wrcb.core.AudioSample",
         "wrcb.forces.UserInput",
         "wrcb.forces.Inertia"
     ],
-    function (utils, assets, Actor, UserInput, Inertia) {
+    function (utils, assets, Actor, AudioSample, UserInput, Inertia) {
 
         var Car = function (params) {
             this.constructor(params);
 
-            var carSprite = assets.get("assets/images/car_white_red_stripes.png");
+            var carSprite = assets.get("assets/images/car_white_red_stripes.png"),
+                engineSound = new AudioSample(assets.get("assets/effects/engine.mp3"));
 
             this.addForce(new UserInput);
             this.addForce(new Inertia);
@@ -29,6 +31,13 @@ mamd.define(
                 context.translate(-center[0], -center[1]);
 
                 context.drawImage(carSprite, 0, 0, d[0], d[1]);
+            };
+
+
+            this.tick = function () {
+                if (engineSound.isPlaying() === false) {
+                    engineSound.play();
+                }
             };
 
             this.cornerCollisionWith = function (corner, actor) {

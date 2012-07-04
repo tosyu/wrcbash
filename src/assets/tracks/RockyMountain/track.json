@@ -5,6 +5,9 @@
         "images": [
             "assets/images/car_white_red_stripes.png",
             "assets/images/sample-map.png"
+        ],
+        "audio": [
+            "assets/effects/engine.mp3"
         ]
     },
     "actors": [
@@ -24,7 +27,7 @@
             "watched": true,
             "params": {
                 "x": 363,
-                "y": 220,
+                "y": 360,
                 "width": 64,
                 "height": 64,
                 "drawable": true,

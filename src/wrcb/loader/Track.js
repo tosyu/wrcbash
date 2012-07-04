@@ -1,9 +1,10 @@
 mamd.define("wrcb.loader.Track",
     [
         "wrcb.core.Request",
+        "wrcb.core.utils",
         "wrcb.loader.Assets",
         "wrcb.core.Scene"
-    ], function (request, assets, Scene) {
+    ], function (request, utils, assets, Scene) {
     var Track = function (url, v, callback) {
         !!DEBUG && console.log("loading track", url);
         var scene = null,
@@ -11,7 +12,8 @@ mamd.define("wrcb.loader.Track",
             viewport = v,
             rs = request.create({
                 "url": url
-            }).on("success", function (data) {
+            }).on("success", function (_raw) {
+                var data = utils.decodeJson(_raw);
                 id = data.id;
                 !!DEBUG && console.log("loaded track", url, data.id)
                 assets.load(data.assets, function () {

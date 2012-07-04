@@ -23,6 +23,10 @@
         <script type="text/javascript" src="assets/js/mamd.js"></script>
         <script type="text/javascript" src="assets/js/Stats.js"></script>
         <script type="text/javascript">
+            window.SM2_DEFER = true;
+        </script>
+        <script type="text/javascript" src="assets/js/soundmanagerv297a-20120624/script/soundmanager2.js"></script>
+        <script type="text/javascript">
             (function (window, document) {
                 mamd.require(["wrcb.dom.Ready"], function (ready) {
                     ready(function () {
@@ -31,7 +35,16 @@
                         window.NO_FLOAT = true;
                         DEBUG && console.log("dom is ready, loading main game file");
                         mamd.require(["wrcb.core.Game"], function (game) {
-                                game.init();
+                                window.soundManager = new SoundManager();
+                                if (DEBUG) {
+                                    soundManager.debugMode = true;
+                                }
+                                soundManager.setup({
+                                    "url": "assets/js/soundmanagerv297a-20120624/swf",
+                                    "flashVersion": 9,
+                                    "onready": game.init
+                                });
+                                soundManager.beginDelayedInit();
                             });
                         });
                 });

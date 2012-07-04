@@ -12,6 +12,15 @@ mamd.define("wrcb.core.utils", function () {
 
     return {
 
+        "decodeJson": function (data) {
+            try {
+                return JSON.parse(data);
+            } catch (e) {
+                !!DEBUG && console.error(e);
+            }
+            return null;
+        },
+
         "filter": function (arr, func, boundTo) {
             var bound = boundTo || arr,
                 l = arr.length,

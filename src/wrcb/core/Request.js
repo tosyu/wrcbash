@@ -58,13 +58,12 @@ mamd.define("wrcb.core.Request", function () {
             return req;
         };
 
+        this.setResponseType = function (rt) {
+            req.responseType = rt;
+        };
+
         this.getResponse = getResponse = function () {
-            try {
-                return JSON.parse(req.responseText);
-            } catch (err) {
-                !!DEBUG && console.error(err, "in", params.url);
-            }
-            return null;
+            return req.responseText;
         };
 
         this.getStatus = function () {
