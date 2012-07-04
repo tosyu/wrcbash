@@ -58,6 +58,10 @@ mamd.define(
             this.getSubSamples = function () {
                 return subSamples;
             };
+
+            this.setPan = function (p) {
+                !!sample && sample.setPan(p);
+            };
         };
         return AudioSample;
     }
