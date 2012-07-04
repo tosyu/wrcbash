@@ -3,19 +3,40 @@ mamd.define(
     function () {
         var AudioSample = function (sample) {
             var sample = sample || false,
+                subSamples = [],
                 playing = false,
                 loop = false;
 
-            var play = this.play = function () {
+            var stop = this.stop = function () {
                 !!DEBUG && console.log("playing", sample);
-                playing = true;
-                !!sample && sample.play();
+                !!sample && sample.stop();
+                playing = false;
             };
 
-           var stop = this.stop = function () {
+            var play = this.play = function (subSampleId) {
                 !!DEBUG && console.log("playing", sample);
-                playing = false;
-                !!sample && sample.stop();
+                if (!!sample && sample.loaded) {
+                    var start = 0,
+                        end = sample.duration;
+                    if (!!subSampleId && !!subSamples[subSampleId]) {
+                        start = subSamples[subSampleId].start;
+                        end = start + subSamples[subSampleId].duration;
+                    }
+                    sample.setPosition(start);
+                    sample.play({
+                        whileplaying: function () {
+                            if (sample.position  >= end) {
+                                if (loop) {
+                                    sample.setPosition(start);
+                                    sample.resume();
+                                } else {
+                                    stop();
+                                }
+                            }
+                        }
+                    });
+                    playing = true;
+                }
             };
 
             this.isPlaying = function () {
@@ -28,6 +49,14 @@ mamd.define(
 
             this.setVolume = function (v) {
                 !!sample && sample.setVolume(v);
+            };
+
+            this.setSubSamples = function (s) {
+                subSamples = s;
+            };
+
+            this.getSubSamples = function () {
+                return subSamples;
             };
         };
         return AudioSample;

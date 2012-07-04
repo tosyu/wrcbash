@@ -15,7 +15,7 @@ mamd.define(
 
             var carSprite = assets.get("assets/images/car_white_red_stripes.png"),
                 engineSound = new AudioSample(assets.get("assets/effects/engine.mp3"));
-
+                engineSound.setLooping(true);
             this.addForce(new UserInput);
             this.addForce(new Inertia);
 
