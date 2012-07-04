@@ -29,7 +29,7 @@ mamd.define(
             };
 
             this.setVolume = function (v) {
-                //???
+                !!sample && sample.setVolume(v);
             };
         };
         return AudioSample;
