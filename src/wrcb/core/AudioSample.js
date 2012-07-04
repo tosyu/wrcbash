@@ -9,9 +9,7 @@ mamd.define(
             var play = this.play = function () {
                 !!DEBUG && console.log("playing", sample);
                 playing = true;
-                !!sample && sample.play({
-                    "onfinish": loop ? play : null
-                });
+                !!sample && sample.play();
             };
 
            var stop = this.stop = function () {
