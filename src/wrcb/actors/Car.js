@@ -15,7 +15,16 @@ mamd.define(
 
             var carSprite = assets.get("assets/images/car_white_red_stripes.png"),
                 engineSound = new AudioSample(assets.get("assets/effects/engine.mp3"));
-                engineSound.setLooping(true);
+
+            engineSound.setSubSamples({
+                "normal": [33, 2228]
+            });
+            engineSound.setLooping(true);
+            engineSound.setCrossfadingLoop(true);
+            window.setTimeout(function () {
+                engineSound.stop();
+            }, 10000);
+
             this.addForce(new UserInput);
             this.addForce(new Inertia);
 
@@ -36,7 +45,7 @@ mamd.define(
 
             this.tick = function () {
                 if (engineSound.isPlaying() === false) {
-                    engineSound.play();
+                    //engineSound.play("normal");
                 }
             };
 

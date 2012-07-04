@@ -3,13 +3,15 @@ mamd.define("wrcb.loader.Track",
         "wrcb.core.Request",
         "wrcb.core.utils",
         "wrcb.loader.Assets",
-        "wrcb.core.Scene"
-    ], function (request, utils, assets, Scene) {
+        "wrcb.core.Scene",
+        "wrcb.core.AudioSample"
+    ], function (request, utils, assets, Scene, AudioSample) {
     var Track = function (url, v, callback) {
         !!DEBUG && console.log("loading track", url);
         var scene = null,
             id = null,
             viewport = v,
+            soundtrack = null,
             rs = request.create({
                 "url": url
             }).on("success", function (_raw) {
@@ -43,6 +45,7 @@ mamd.define("wrcb.loader.Track",
                                 scene.registerActor(Scene.consts[data.actors[instance].layer], tempInstance.getId(), tempInstance);
                             }
                             viewport.addScene(id, scene);
+                            soundtrack = new AudioSample(assets.get(data.soundtrack));
                             !!callback && typeof callback === "function" && callback();
                         });
                     });
@@ -55,6 +58,7 @@ mamd.define("wrcb.loader.Track",
         rs.send();
         this.run = function () {
             viewport.setScene(id);
+            !!soundtrack && soundtrack.play();
         };
     };
     return {
