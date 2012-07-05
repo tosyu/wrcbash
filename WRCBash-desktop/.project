@@ -18,7 +18,7 @@
 		<link>
 			<name>assets</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/WRCBash-android/assets</locationURI>
+			<location>E:/projekty/wrcbash/WRCBash-html/war/assets</location>
 		</link>
 	</linkedResources>
 </projectDescription>
