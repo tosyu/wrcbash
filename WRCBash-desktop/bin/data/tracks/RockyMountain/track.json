@@ -1,0 +1,42 @@
+{
+    "id": "rocky_mountain_01",
+    "camera": "wrcb.cameras.ElasticCamera",
+    "assets": {
+        "images": [
+            "data/images/car_white_red_stripes.png",
+            "data/images/sample-map.png"
+        ],
+        "audio": [
+            "data/sounds/engine.mp3",
+            "data/music/8-Bit_Ninjas_-_12_-_Shiny_Spaceship.mp3"
+        ]
+    },
+    "soundtrack": "assets/music/8-Bit_Ninjas_-_12_-_Shiny_Spaceship.mp3",
+    "actors": [
+        {
+            "instance": "com.tosyu.WRCBash.actors.WRCBashBackground",
+            "layer": "LAYER_BACKGROUND",
+            "params": {
+                "y": 0,
+                "x": 0,
+                "drawable": true,
+                "asset": "data/images/sample-map.png"
+            }
+        },
+        {
+            "instance": "com.tosyu.WRCBash.actors.WRCBashCar",
+            "layer": "LAYER_MIDGROUND",
+            "watched": true,
+            "params": {
+                "x": 363,
+                "y": 360,
+                "width": 64,
+                "height": 64,
+                "drawable": true,
+                "collidable": true,
+                "collider": true,
+                "rotation": 20
+            }
+        }
+    ]
+}

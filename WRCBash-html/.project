@@ -29,7 +29,13 @@
 		<link>
 			<name>assets</name>
 			<type>2</type>
-			<location>E:/projekty/wrcbash/WRCBash-android/assets</location>
+			<locationURI>ANDROID_LOC/assets</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>ANDROID_LOC</name>
+			<value>$%7BPARENT-1-PROJECT_LOC%7D/WRCBash-android</value>
+		</variable>
+	</variableList>
 </projectDescription>
