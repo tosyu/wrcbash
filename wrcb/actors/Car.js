@@ -13,8 +13,8 @@ mamd.define(
         var Car = function (params) {
             this.constructor(params);
 
-            var carSprite = assets.get("assets/images/car_white_red_stripes.png"),
-                engineSound = new AudioSample(assets.get("assets/effects/engine.mp3"));
+            var carSprite = assets.get("/wrcbash/assets/images/car_white_red_stripes.png"),
+                engineSound = new AudioSample(assets.get("/wrcbash/assets/effects/engine.mp3"));
 
             engineSound.setSubSamples({
                 "normal": [33, 2228]
