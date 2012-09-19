@@ -22,3 +22,5 @@ way anybody uses it.
 That said, have fun.
 
 BTW. to checkout the game go to [http://tosyu.github.com/wrcbash/](http://tosyu.github.com/wrcbash/ "WRCBash!")
+Please bare in mind that there is **no loading optimization** and **no loader screen** so it can take few minutes
+to start :)
