@@ -3,7 +3,7 @@ WRCBash!
 
 A simple top-perspective WRC game
 
-This project abandoned. If you want to use it, rewrite it, do as you
+**This project abandoned**. If you want to use it, rewrite it, do as you
 please. I would love to hear about the work you made, or changes. 
 
 The game supports simble AABB collisions (but on the test map there are
