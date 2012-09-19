@@ -11,3 +11,5 @@ any guarantees. I'm not responsible for any damage done with it or the
 way anybody uses it.
 
 That said, have fun.
+
+BTW. to checkout the game go to [http://tosyu.github.com/wrcbash/](http://tosyu.github.com/wrcbash/ "WRCBash!")
