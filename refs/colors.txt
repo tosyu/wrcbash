@@ -1,1 +1,0 @@
-darker_ground: 7e6e54, multiply, 25% opacity
